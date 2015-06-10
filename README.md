@@ -1,2 +1,3 @@
-# Raytracer
-RayTracer for Computer Graphics, Group 16
+Group 16--
+
+SCHRIJF HIERONDER JE NAAM ALS JE SUCCESVOL HEBT GEGITHUBD
