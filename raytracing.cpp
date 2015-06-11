@@ -2,8 +2,9 @@
 #ifdef WIN32
 #include <windows.h>
 #endif
-#include <GL/glut.h>
+#include <C:/Program Files (x86)/Microsoft Visual Studio 14.0/include/GL/glut.h>
 #include "raytracing.h"
+
 
 
 //temporary variables
@@ -23,7 +24,7 @@ void init()
 	//PLEASE ADAPT THE LINE BELOW TO THE FULL PATH OF THE dodgeColorTest.obj
 	//model, e.g., "C:/temp/myData/GraphicsIsFun/dodgeColorTest.obj", 
 	//otherwise the application will not load properly
-    MyMesh.loadMesh("dodgeColorTest.obj", true);
+    MyMesh.loadMesh("C:/Users/Alan/Desktop/fresh/cube.obj", true);
 	MyMesh.computeVertexNormals();
 
 	//one first move: initialize the first light source
@@ -35,7 +36,29 @@ void init()
 //return the color of your pixel.
 Vec3Df performRayTracing(const Vec3Df & origin, const Vec3Df & dest)
 {
-	return Vec3Df(dest[0],dest[1],dest[2]);
+	float depth = FLT_MAX;
+	Vec3Df rgb = (0, 0, 0);
+
+	for (unsigned int i = 0; i < MyMesh.triangles.size; i++) {
+		float current = intersect(origin, dest, MyMesh.triangles[i]);
+		if (current < depth) {
+			depth = current;
+			//rgb = MyMesh.triangles[i]. update color according to current triangle
+		}		
+	}
+}
+
+float intersect(const Vec3Df & origin, const Vec3Df dest,  const Triangle & triang) {
+	//magic
+	Vec3Df v1 = MyMesh.vertices[triang.v[0]].p;
+	Vec3Df v2 = MyMesh.vertices[triang.v[1]].p;
+	Vec3Df v3 = MyMesh.vertices[triang.v[2]].p;
+
+
+
+
+	//return FLT_MAX if no intersection
+	//return newDepth if intersection
 }
 
 
