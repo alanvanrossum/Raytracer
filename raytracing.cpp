@@ -2,7 +2,7 @@
 #ifdef WIN32
 #include <windows.h>
 #endif
-#include <C:/Program Files (x86)/Microsoft Visual Studio 14.0/include/GL/glut.h>
+#include <GL/glut.h>
 #include "raytracing.h"
 
 
@@ -38,7 +38,7 @@ Vec3Df performRayTracing(const Vec3Df & origin, const Vec3Df & dest)
 {
 	float depth = FLT_MAX;
 	Vec3Df rgb = (0, 0, 0);
-
+	/*
 	for (unsigned int i = 0; i < MyMesh.triangles.size; i++) {
 		float current = intersect(origin, dest, MyMesh.triangles[i]);
 		if (current < depth) {
@@ -46,6 +46,7 @@ Vec3Df performRayTracing(const Vec3Df & origin, const Vec3Df & dest)
 			//rgb = MyMesh.triangles[i]. update color according to current triangle
 		}		
 	}
+	*/
 }
 
 float intersect(const Vec3Df & origin, const Vec3Df dest,  const Triangle & triang) {
@@ -56,7 +57,7 @@ float intersect(const Vec3Df & origin, const Vec3Df dest,  const Triangle & tria
 
 
 
-
+	return 0;
 	//return FLT_MAX if no intersection
 	//return newDepth if intersection
 }
