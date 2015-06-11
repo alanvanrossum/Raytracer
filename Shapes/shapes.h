@@ -26,24 +26,24 @@ class Shape {
 * Uses Triangle from mesh.h
 */
 class MyTriangle : public Shape {
-public:
-	// Constructor
-	MyTriangle(Mesh *mesh, Triangle *triangle);
+	public:
+		// Constructor
+		MyTriangle(Mesh *mesh, Triangle *triangle);
 
-	// Inherited methods.
-	virtual bool intersection(const Vec3Df&, const Vec3Df&, Vec3Df&, Vec3Df&) = 0;
+		// Inherited methods.
+		virtual bool intersection(const Vec3Df&, const Vec3Df&, Vec3Df&, Vec3Df&) = 0;
 };
 
 /**
 * Plane
 */
 class Plane : public Shape {
-public:
-	// Constructor
-	Plane(Vec3Df origin, float radius);
+	public:
+		// Constructor
+		Plane(Vec3Df origin, float radius);
 
-	// Inherited methods.
-	virtual bool intersection(const Vec3Df&, const Vec3Df&, Vec3Df&, Vec3Df&) = 0;
+		// Inherited methods.
+		virtual bool intersection(const Vec3Df&, const Vec3Df&, Vec3Df&, Vec3Df&) = 0;
 };
 
 /**
