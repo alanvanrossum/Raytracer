@@ -4,17 +4,14 @@
 #endif
 #include <GL/glut.h>
 #include "raytracing.h"
-
-// Global variables to draw a debug ray trace.
-Vec3Df testRayOrigin;
-Vec3Df testRayDestination;
+#include "Shapes\shape.h"
 
 /**
  * INIT
  *
  * Initialize the scene here.
  * 
- * - Load meshes
+ * - Load meshes/triangles/cubes/spheres or whatever.
  * - Load lightsources
  * - 
  */
@@ -27,12 +24,20 @@ void init()
 	//PLEASE ADAPT THE LINE BELOW TO THE FULL PATH OF THE dodgeColorTest.obj
 	//model, e.g., "C:/temp/myData/GraphicsIsFun/dodgeColorTest.obj", 
 	//otherwise the application will not load properly
-    MyMesh.loadMesh("H:/Development/graphics/Project2015/git/cube.obj", true);
-	MyMesh.computeVertexNormals();
+    //MyMesh.loadMesh("H:/Development/graphics/Project2015/git/cube.obj", true);
+	//MyMesh.computeVertexNormals();
 
-	//one first move: initialize the first light source
-	//at least ONE light source has to be in the scene!!!
-	//here, we set it to the current location of the camera
+
+	/**
+	 * Shapes
+	 */
+	// Draw a single sphere.
+
+
+	/**
+	 * Lights
+	 */
+	// One light at the starting camera position.
 	MyLightPositions.push_back(MyCameraPosition);
 }
 

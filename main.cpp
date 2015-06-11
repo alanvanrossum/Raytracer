@@ -12,7 +12,9 @@
 #include "imageWriter.h"
 
 /**
- * Main function, which is drawing an image (frame) on the screen
+ * Main function, which is drawing an image (frame) on the screen.
+ *
+ * Fires every cycle.
  */
 void drawFrame()
 {

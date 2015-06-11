@@ -4,34 +4,27 @@
 #include "../Vec3D.h"
 #include "../mesh.h"
 
+// EPSILON -> Used for rounding errors. (Margin)
+static const float EPSILON = 1e-4f;
+
 /**
  * Shape class. All shapes inherit from this class.
  */
 class Shape {
 	public:
+		// Constructor
+		Shape(Vec3Df origin);
+
 		/**
 		 * Method to check if a ray intersects with this shape.
 		 * 1st param:	Origin of the ray
 		 * 2nd param:	Direction of the ray
-		 * 3rd param:	Point of intersection
-		 * 4th param:	Normal at the point of intersection.
 		 * Return:		Wheter the ray has intersected with this object.
 		 */
-		virtual bool intersection(const Vec3Df&, const Vec3Df&, Vec3Df&, Vec3Df&) = 0;
-};
+		virtual bool intersection(const Vec3Df&, const Vec3Df&) = 0;
 
-/**
-* Triangle
-* 
-* Uses Triangle from mesh.h
-*/
-class MyTriangle : public Shape {
-	public:
-		// Constructor
-		MyTriangle(Mesh *mesh, Triangle *triangle);
-
-		// Inherited methods.
-		virtual bool intersection(const Vec3Df&, const Vec3Df&, Vec3Df&, Vec3Df&) = 0;
+		// Variables
+		const Vec3Df _origin;
 };
 
 /**
@@ -43,7 +36,7 @@ class Plane : public Shape {
 		Plane(Vec3Df origin, float radius);
 
 		// Inherited methods.
-		virtual bool intersection(const Vec3Df&, const Vec3Df&, Vec3Df&, Vec3Df&) = 0;
+		virtual bool intersection(const Vec3Df&, const Vec3Df&) = 0;
 };
 
 /**
@@ -55,7 +48,7 @@ class Sphere : public Shape {
 		Sphere(Vec3Df origin, float coefficient);
 
 		// Inherited methods.
-		virtual bool intersection(const Vec3Df&, const Vec3Df&, Vec3Df&, Vec3Df&) = 0;
+		virtual bool intersection(const Vec3Df&, const Vec3Df&) = 0;
 };
 
 #endif // SHAPES_header
