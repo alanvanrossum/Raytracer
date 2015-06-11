@@ -47,6 +47,7 @@ Vec3Df performRayTracing(const Vec3Df & origin, const Vec3Df & dest)
 		}		
 	}
 	*/
+	return 0;
 }
 
 float intersect(const Vec3Df & origin, const Vec3Df dest,  const Triangle & triang) {
