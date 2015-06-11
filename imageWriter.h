@@ -119,6 +119,8 @@ bool Image::writeImage(const char * filename)
 		return false;
 	}
 
+	cout << "Image succesfully written to: " << filename << endl;
+
 	fclose(file);
 	return true;
 }
