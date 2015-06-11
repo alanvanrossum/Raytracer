@@ -22,7 +22,7 @@ Utilitaires pour appliquer une traqueboule a une fenetre OpenGL.
 #include "matrix.h"
 #include "stdio.h"
 #include "Vec3D.h"
-static const float speedfact = 0.2;
+static const float speedfact = 0.2f;
 
 /** votre fonction d'affichage */
 void display();
@@ -107,13 +107,14 @@ void tbMouseFunc( int button, int state, int x, int y )
 /** Traite le changement de position de la souris */
 void tbMotionFunc( int x, int y )
 {
-    double dx,dy,nrm, tx,ty,tz;
+    GLdouble tx,ty,tz;
+	GLfloat nrm, dx, dy;
 
     if( tb_tournerXY || tb_translaterXY || tb_bougerZ )
     {
         /* deplacement */
-        dx = x - tb_ancienX;
-        dy = tb_ancienY - y; /* axe vertical dans l'autre sens */
+        dx = (GLfloat)x - tb_ancienX;
+		dy = (GLfloat)tb_ancienY - y; /* axe vertical dans l'autre sens */
 
         if( tb_tournerXY )
         {
@@ -124,7 +125,7 @@ void tbMotionFunc( int x, int y )
             tz = tb_matrix[14];
             tb_matrix[14]=0;
 
-            nrm = sqrt( dx*dx+dy*dy+dx*dx+dy*dy )*speedfact;
+            nrm = (GLfloat)sqrt( dx*dx+dy*dy+dx*dx+dy*dy )*speedfact;
             glLoadIdentity();
             glRotatef( nrm, -dy, dx, 0 );/*axe perpendiculaire au deplacement*/
             glMultMatrixd( tb_matrix );
@@ -181,7 +182,7 @@ void tbRotate( double angle, double x, double y, double z )
     tb_matrix[14]=0;
 
     glLoadIdentity();
-    glRotatef( angle, x, y, z );
+	glRotatef((GLfloat)angle, (GLfloat)x, (GLfloat)y, (GLfloat)z);
     glMultMatrixd( tb_matrix );
     glGetDoublev( GL_MODELVIEW_MATRIX, tb_matrix );
 
@@ -217,9 +218,9 @@ Vec3Df getCameraPosition()
 	GLdouble LightP[4];
 	tbProject(p, LightP);
 	Vec3Df LightPos;
-	LightPos[0]=LightP[0];
-	LightPos[1]=LightP[1];
-	LightPos[2]=LightP[2];
+	LightPos[0] = (float)LightP[0];
+	LightPos[1] = (float)LightP[1];
+	LightPos[2] = (float)LightP[2];
 	return LightPos;
 }
 Vec3Df getWorldPositionOfPixel(unsigned int px, unsigned int py)
@@ -237,6 +238,6 @@ Vec3Df getWorldPositionOfPixel(unsigned int px, unsigned int py)
 
 
 
-	return Vec3Df(x,y,z);
+	return Vec3Df((float)x, (float)y, (float)z);
 }
 #endif

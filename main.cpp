@@ -1,6 +1,7 @@
 #ifdef WIN32
 #include <windows.h>
 #endif
+#include "main.h"
 #include <GL/glut.h>
 #include <stdlib.h>
 #include <math.h>
@@ -11,28 +12,9 @@
 #include "imageWriter.h"
 
 /**
- * Global variables
- */
-
-Vec3Df MyCameraPosition;				// The current position of the camera.
-std::vector<Vec3Df> MyLightPositions;	// All the light positions. Only used for raytracing.
-Mesh MyMesh;							// A single mesh
-
-// Windows size
-unsigned int WindowSize_X = 800;		// resolution X
-unsigned int WindowSize_Y = 800;		// resolution Y
-
-/**
- * Function declarations
- */
-void display(void);
-void reshape(int w, int h);
-void keyboard(unsigned char key, int x, int y);
-
-/**
  * Main function, which is drawing an image (frame) on the screen
  */
-void drawFrame( )
+void drawFrame()
 {
 	yourDebugDraw();
 }
