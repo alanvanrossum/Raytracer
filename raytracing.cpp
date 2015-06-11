@@ -5,16 +5,19 @@
 #include <GL/glut.h>
 #include "raytracing.h"
 
-
-
-//temporary variables
-//these are only used to illustrate 
-//a simple debug drawing. A ray 
+// Global variables to draw a debug ray trace.
 Vec3Df testRayOrigin;
 Vec3Df testRayDestination;
 
-
-//use this function for any preprocessing of the mesh.
+/**
+ * INIT
+ *
+ * Initialize the scene here.
+ * 
+ * - Load meshes
+ * - Load lightsources
+ * - 
+ */
 void init()
 {
 	//load the mesh file
@@ -24,7 +27,7 @@ void init()
 	//PLEASE ADAPT THE LINE BELOW TO THE FULL PATH OF THE dodgeColorTest.obj
 	//model, e.g., "C:/temp/myData/GraphicsIsFun/dodgeColorTest.obj", 
 	//otherwise the application will not load properly
-    MyMesh.loadMesh("C:/Users/Alan/Desktop/fresh/cube.obj", true);
+    MyMesh.loadMesh("H:/Development/graphics/Project2015/git/cube.obj", true);
 	MyMesh.computeVertexNormals();
 
 	//one first move: initialize the first light source
@@ -33,38 +36,51 @@ void init()
 	MyLightPositions.push_back(MyCameraPosition);
 }
 
-//return the color of your pixel.
-Vec3Df performRayTracing(const Vec3Df & origin, const Vec3Df & dest)
+/**
+* Ray Tracing
+*
+* This function uses an origin and destination.
+*
+* It will return a ray tracing function which uses origin and direction.
+*/
+Vec3Df performRayTracing(const Vec3Df & origin, const Vec3Df & destination)
 {
-	float depth = FLT_MAX;
-	Vec3Df rgb = (0, 0, 0);
-	/*
-	for (unsigned int i = 0; i < MyMesh.triangles.size; i++) {
-		float current = intersect(origin, dest, MyMesh.triangles[i]);
-		if (current < depth) {
-			depth = current;
-			//rgb = MyMesh.triangles[i]. update color according to current triangle
-		}		
-	}
-	*/
-	return 0;
+	// Perform ray tracing with a origin and a direction instead of a origin and a destination.
+	// Usefull when we're going to do refraction and reflection.
+	Vec3Df direction = destination - origin;
+
+	// Normalize the direction.
+	direction.normalize();
+
+	// Return the ray tracing function which uses origin and direction.
+	// Level start at 0, max 5.
+	return performRayTracing(origin, direction, 0, 5);
 }
 
-float intersect(const Vec3Df & origin, const Vec3Df dest,  const Triangle & triang) {
-	//magic
-	Vec3Df v1 = MyMesh.vertices[triang.v[0]].p;
-	Vec3Df v2 = MyMesh.vertices[triang.v[1]].p;
-	Vec3Df v3 = MyMesh.vertices[triang.v[2]].p;
+/**
+ * Ray Tracing
+ * 
+ * This function uses an origin and direction to calculate collisions.
+ * 
+ * It will return the color of the pixel.
+ */
+Vec3Df performRayTracing(const Vec3Df & origin, const Vec3Df & direction, unsigned char level, unsigned char max)
+{
+	// If we are out of bounces, return black. (infinity)
+	if (level == max)
+		return Vec3Df(0, 0, 0);
 
 
-
-	return 0;
-	//return FLT_MAX if no intersection
-	//return newDepth if intersection
+	// Return 0 for now. Will need shapes first!
+	return Vec3Df(0, 0, 0);
 }
 
 
 
+
+/**
+ * Debug function to draw things in real time
+ */
 void yourDebugDraw()
 {
 	//draw open gl debug stuff
@@ -120,7 +136,7 @@ void yourDebugDraw()
 //
 //A few keys are already reserved: 
 //'L' adds a light positioned at the camera location to the MyLightPositions vector
-//'l' modifies the last added light to the current 
+//'l' modifies the last added ligh t to the current 
 //    camera position (by default, there is only one light, so move it with l)
 //    ATTENTION These lights do NOT affect the real-time rendering. 
 //    You should use them for the raytracing.
