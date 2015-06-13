@@ -12,6 +12,26 @@
 #include "imageWriter.h"
 
 /**
+ * VARIABLE DEFINITION
+ */
+// The current position of the camera.
+Vec3Df MyCameraPosition;
+
+// All the light positions. Only used for raytracing.
+std::vector<Vec3Df> MyLightPositions;
+
+// A single mesh
+Mesh MyMesh;
+
+// Windows size
+unsigned int WindowSize_X = 800;
+unsigned int WindowSize_Y = 800;
+
+// Raytraced image size
+unsigned int ImageSize_X = WindowSize_X;
+unsigned int ImageSize_Y = WindowSize_Y;
+
+/**
  * Main function, which is drawing an image (frame) on the screen.
  *
  * Fires every cycle.

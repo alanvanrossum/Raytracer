@@ -12,21 +12,21 @@
  */
 
 // The current position of the camera.
-Vec3Df MyCameraPosition;
+extern Vec3Df MyCameraPosition;
 
 // All the light positions. Only used for raytracing.
-std::vector<Vec3Df> MyLightPositions;
+extern std::vector<Vec3Df> MyLightPositions;
 
 // A single mesh
-Mesh MyMesh;
+extern Mesh MyMesh;
 
 // Windows size
-unsigned int WindowSize_X = 800;
-unsigned int WindowSize_Y = 800;
+extern unsigned int WindowSize_X;
+extern unsigned int WindowSize_Y;
 
 // Raytraced image size
-unsigned int ImageSize_X = WindowSize_X;
-unsigned int ImageSize_Y = WindowSize_Y;
+extern unsigned int ImageSize_X;
+extern unsigned int ImageSize_Y;
 
 /**
  * Function declarations

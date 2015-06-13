@@ -4,7 +4,17 @@
 #endif
 #include <GL/glut.h>
 #include "raytracing.h"
+#include "main.h"
 #include "Shapes\shape.h"
+
+/**
+ * VARIABLES
+ */
+std::vector<Shape*> shapes;
+
+// Global variables to draw a debug ray trace.
+Vec3Df testRayOrigin;
+Vec3Df testRayDestination;
 
 /**
  * INIT
@@ -31,8 +41,8 @@ void init()
 	/**
 	 * Shapes
 	 */
-	// Draw a single sphere.
-
+	// Draw a single plane.
+	shapes.push_back(new Plane(Vec3Df(1, 0, 0), Vec3Df(0, -1, 0), Vec3Df(0, 1, 0)));
 
 	/**
 	 * Lights
@@ -92,7 +102,12 @@ void yourDebugDraw()
 	//this function is called every frame
 
 	//let's draw the mesh
-	MyMesh.draw();
+	//MyMesh.draw();
+
+	// Draw all the shapes for the viewport window.
+	for (int i = 0; i < shapes.size(); i++) {
+		shapes[i]->draw();
+	}
 	
 	//let's draw the lights in the scene as points
 	glPushAttrib(GL_ALL_ATTRIB_BITS); //store all GL attributes

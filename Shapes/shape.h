@@ -13,18 +13,24 @@ static const float EPSILON = 1e-4f;
 class Shape {
 	public:
 		// Constructor
-		Shape(Vec3Df origin);
+		Shape(Vec3Df color, Vec3Df origin);
 
 		/**
 		 * Method to check if a ray intersects with this shape.
 		 * 1st param:	Origin of the ray
 		 * 2nd param:	Direction of the ray
+		 * 3rd param:	Color of intersected point
 		 * Return:		Wheter the ray has intersected with this object.
 		 */
-		virtual bool intersection(const Vec3Df&, const Vec3Df&) = 0;
+		virtual bool intersection(const Vec3Df&, const Vec3Df&, Vec3Df&) = 0;
+
+		// Draw function
+		// Used so we can see our shape in the viewport. -> Not used for raytracing
+		virtual void draw() = 0;
 
 		// Variables
 		const Vec3Df _origin;
+		const Vec3Df _color;
 };
 
 /**
@@ -33,10 +39,16 @@ class Shape {
 class Plane : public Shape {
 	public:
 		// Constructor
-		Plane(Vec3Df origin, float radius);
+		Plane(Vec3Df color, Vec3Df origin, Vec3Df coefficient);
 
 		// Inherited methods.
-		virtual bool intersection(const Vec3Df&, const Vec3Df&) = 0;
+		virtual bool intersection(const Vec3Df&, const Vec3Df&, Vec3Df&);
+
+		// Draw method
+		virtual void draw();
+
+		// Variables
+		const Vec3Df _coefficient;
 };
 
 /**
@@ -45,10 +57,16 @@ class Plane : public Shape {
 class Sphere : public Shape {
 	public:
 		// Constructor
-		Sphere(Vec3Df origin, float coefficient);
+		Sphere(Vec3Df color, Vec3Df origin, float radius);
 
 		// Inherited methods.
-		virtual bool intersection(const Vec3Df&, const Vec3Df&) = 0;
+		virtual bool intersection(const Vec3Df&, const Vec3Df&, Vec3Df&);
+
+		// Draw method
+		virtual void draw();
+
+		// Variables
+		const Vec3Df _radius;
 };
 
 #endif // SHAPES_header

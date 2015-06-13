@@ -2,17 +2,15 @@
 #define RAYTRACING_Hjdslkjfadjfasljf
 #include <vector>
 #include "mesh.h"
+#include "Shapes\shape.h"
 
 
 // Variables
-std::vector<Shape*> shapes;
-
-
-
+extern std::vector<Shape*> shapes;
 
 // Global variables to draw a debug ray trace.
-Vec3Df testRayOrigin;
-Vec3Df testRayDestination;
+extern Vec3Df testRayOrigin;
+extern Vec3Df testRayDestination;
 
 extern Mesh MyMesh; //Main mesh
 extern std::vector<Vec3Df> MyLightPositions;
