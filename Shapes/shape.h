@@ -68,7 +68,7 @@ class Sphere : public Shape {
 		virtual void draw();
 
 		// Variables
-		const Vec3Df _radius;
+		const float _radius;
 };
 
 #endif // SHAPES_header

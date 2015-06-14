@@ -15,6 +15,10 @@ Plane::Plane(Vec3Df color, Vec3Df origin, Vec3Df coefficient) : Shape(color, ori
 * Intersection method, returns if collided, and which color.
 */
 bool Plane::intersection(const Vec3Df& origin, const Vec3Df& direction, Vec3Df& new_origin, Vec3Df& new_direction, Vec3Df& color){
+	//
+	// See this for explanation: https://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection
+	//
+
 	// Set the color.
 	color = _color;
 	
