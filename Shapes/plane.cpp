@@ -14,23 +14,26 @@ Plane::Plane(Vec3Df color, Vec3Df origin, Vec3Df coefficient) : Shape(color, ori
 /**
 * Intersection method, returns if collided, and which color.
 */
-bool Plane::intersection(const Vec3Df& origin, const Vec3Df& direction, Vec3Df& color){
+bool Plane::intersection(const Vec3Df& origin, const Vec3Df& direction, Vec3Df& new_origin, Vec3Df& new_direction, Vec3Df& color){
 	// Set the color.
 	color = _color;
 	
 	// Normalize the coefficient
-	Vec3Df normal = _coefficient;
-	normal.normalize();
+	new_direction = _coefficient;
+	new_direction.normalize();
 
 	// 
-	float denom = Vec3Df::dotProduct(direction, normal);
+	float denom = Vec3Df::dotProduct(direction, new_direction);
 	if (denom > -EPSILON && denom < EPSILON)
 		return false;
 
 	// Calculate term t in the expressen 'p = o + tD'
-	float t = Vec3Df::dotProduct(_origin - origin, normal) / denom;
+	float t = Vec3Df::dotProduct(_origin - origin, new_direction) / denom;
 	if (t < EPSILON)
 		return false;
+	
+	// Calculate the new origin.
+	new_origin = origin + t * direction;
 
 	return true;
 }

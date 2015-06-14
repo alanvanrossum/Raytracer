@@ -41,7 +41,7 @@ void init()
 	/**
 	 * Shapes
 	 */
-	// Draw a single plane.
+	// Draw a single red plane.
 	shapes.push_back(new Plane(Vec3Df(1, 0, 0), Vec3Df(0, -1, 0), Vec3Df(0, 1, 0)));
 
 	/**
@@ -81,13 +81,52 @@ Vec3Df performRayTracing(const Vec3Df & origin, const Vec3Df & destination)
  */
 Vec3Df performRayTracing(const Vec3Df & origin, const Vec3Df & direction, unsigned char level, unsigned char max)
 {
-	// If we are out of bounces, return black. (infinity)
+	// If we are out of bounces, return black.
 	if (level == max)
 		return Vec3Df(0, 0, 0);
 
+	// Color of the point.
+	Vec3Df color;
 
-	// Return 0 for now. Will need shapes first!
-	return Vec3Df(0, 0, 0);
+	// The maximum depth.
+	float current_depth = FLT_MAX;
+
+	// True if a collision occured.
+	bool intersected = false;
+
+	// The new origin at the intersected point
+	Vec3Df new_origin;
+
+	// The normal at the intersected point
+	Vec3Df new_direction;
+
+	// Loop over all objects in the scene.
+	for (int i = 0; i < shapes.size(); i++) {
+
+		// Temp variables for the intersected function.
+		Vec3Df tmp_origin;
+		Vec3Df tmp_direction;		
+
+		if (shapes[i]->intersection(origin, direction, tmp_origin, tmp_direction, color)) {
+			// Check if the new depth is closer to the camera.
+			float depth = (new_origin - origin).getLength();
+			if (depth < current_depth) {
+
+				// We have intersected and are closer to the origin. This is the new next object to raytrace.
+				intersected = true;
+				current_depth = depth;
+				new_origin = tmp_origin;
+				new_direction = tmp_direction;				
+			}
+		}
+	}
+
+	// If no intersection happend, return black. (Color at infinity)
+	if (!intersected)
+		return Vec3Df(0.f, 0.f, 0.f);
+
+	// Return the color of the intersected point.
+	return color;
 }
 
 
