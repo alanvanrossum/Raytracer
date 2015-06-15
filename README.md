@@ -8,7 +8,7 @@ Group 16 -- Ray Tracing
 | Alan van Rossum   |             |           |
 | Boris Schrijver   | brschrijver | 4315332   |
 | Danique Lummen    |             |           |
-| Ege de Bruin      |             |           |
+| Ege de Bruin      | kedebruin   | 4400240   |
 | Ricardo Jongerius |             |           |
 | Wytze Elhorst     |             |           |
 
