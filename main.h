@@ -17,9 +17,6 @@ extern Vec3Df MyCameraPosition;
 // All the light positions. Only used for raytracing.
 extern std::vector<Vec3Df> MyLightPositions;
 
-// A single mesh
-extern Mesh MyMesh;
-
 // Windows size
 extern unsigned int WindowSize_X;
 extern unsigned int WindowSize_Y;

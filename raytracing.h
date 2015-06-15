@@ -12,7 +12,6 @@ extern std::vector<Shape*> shapes;
 extern Vec3Df testRayOrigin;
 extern Vec3Df testRayDestination;
 
-extern Mesh MyMesh; //Main mesh
 extern std::vector<Vec3Df> MyLightPositions;
 extern Vec3Df MyCameraPosition; //currCamera
 extern unsigned int WindowSize_X;//window resolution width

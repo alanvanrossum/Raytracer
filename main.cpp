@@ -20,9 +20,6 @@ Vec3Df MyCameraPosition;
 // All the light positions. Only used for raytracing.
 std::vector<Vec3Df> MyLightPositions;
 
-// A single mesh
-Mesh MyMesh;
-
 // Windows size
 unsigned int WindowSize_X = 800;
 unsigned int WindowSize_Y = 800;

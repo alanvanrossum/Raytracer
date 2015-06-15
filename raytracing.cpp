@@ -34,8 +34,9 @@ void init()
 	//PLEASE ADAPT THE LINE BELOW TO THE FULL PATH OF THE dodgeColorTest.obj
 	//model, e.g., "C:/temp/myData/GraphicsIsFun/dodgeColorTest.obj", 
 	//otherwise the application will not load properly
-    //MyMesh.loadMesh("H:/Development/graphics/Project2015/git/cube.obj", true);
-	//MyMesh.computeVertexNormals();
+	Mesh testMesh;
+	testMesh.loadMesh("H:/Development/graphics/Project2015/git/cube.obj", true);
+	testMesh.computeVertexNormals();
 
 
 	/**
@@ -46,6 +47,9 @@ void init()
 
 	// Draw a green sphere.
 	shapes.push_back(new Sphere(Vec3Df(0, 1, 0), Vec3Df(0, 0, 0), .5f));
+
+	// Draw the model
+	shapes.push_back(new MyMesh(testMesh, Vec3Df(0, 0, 0)));
 
 	/**
 	 * Lights

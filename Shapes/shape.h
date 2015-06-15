@@ -71,4 +71,30 @@ class Sphere : public Shape {
 		const float _radius;
 };
 
+/**
+ * Mesh
+ */
+class MyMesh : public Shape {
+public:
+	// Contructor
+	MyMesh(Mesh mesh, Vec3Df origin);
+
+	// Inherited methods.
+	virtual bool intersection(const Vec3Df&, const Vec3Df&, Vec3Df&, Vec3Df&, Vec3Df&);
+	virtual bool intersection(const Triangle &triangle, const Vec3Df&, const Vec3Df&, Vec3Df&, Vec3Df&);
+
+	// Methods special to this class
+	void barycentric(const Triangle &triangle, const Vec3Df &p, float &a, float &b);
+	Vec3Df getMidPoint();
+
+
+	// Draw method
+	virtual void draw();
+
+	// Variables
+	
+	// Pointer to the mesh.
+	Mesh _mesh;
+};
+
 #endif // SHAPES_header
