@@ -1,107 +1,49 @@
 #ifndef IMAGE_JFDJKDFSLJFDFKSDFDJFDFJSDKSFJSDLF
 #define IMAGE_JFDJKDFSLJFDFKSDFDJFDFJSDKSFJSDLF
-#ifdef WIN32
-#include <windows.h>
-#endif
-#include <GL/glut.h>
-#include <stdlib.h>
-#include <math.h>
-#include <assert.h>
+#include <vector>
+#include <iostream>
 
-//Image class 
-//This class can be used to write your final result to an image. 
-//You can open the image using a PPM viewer.
-
-class RGBValue
-{
+/**
+* RGBValue class. Stores RGB Values per pixel.
+*/
+class RGBValue {
 public:
-	RGBValue(float rI = 0, float gI = 0, float bI = 0)
-		: r(rI)
-		, g(gI)
-		, b(bI)
-	{
-		if (r>1)
-			r = 1.0;
-		if (g>1)
-			g = 1.0;
-		if (b>1)
-			b = 1.0;
+	// Constructor
+	RGBValue(float rI, float gI, float bI);
 
-		if (r<0)
-			r = 0.0;
-		if (g<0)
-			g = 0.0;
-		if (b<0)
-			b = 0.0;
-	};
+	// Methods
+	float operator[](int i) const;
+	float & operator[](int i);
 
-	float operator[](int i) const
-	{
-		switch (i)
-		{
-		case 0:
-			return r;
-		case 1:
-			return g;
-		case 2:
-			return b;
-		default:
-			return r;
-		}
-	}
-	float & operator[](int i)
-	{
-		switch (i)
-		{
-		case 0:
-			return r;
-		case 1:
-			return g;
-		case 2:
-			return b;
-		default:
-			return r;
-		}
-	}
+	// Variables
 	float r, b, g;
 };
 
+/**
+ * Image class
+ *
+ * This class can be used to read or write an image.
+ * It reads and writes it in a PPM format.
+ */
 class Image
 {
 public:
-	Image(int width, int height)
-		: _width(width)
-		, _height(height)
-	{
-		_image.resize(3 * _width*_height);
-	}
-	Image(const char * filename) {
-		readImage(filename);
-	}
-	void setPixel(int i, int j, const RGBValue & rgb)
-	{
-		_image[3 * (_width*j + i)] = rgb[0];
-		_image[3 * (_width*j + i) + 1] = rgb[1];
-		_image[3 * (_width*j + i) + 2] = rgb[2];
+	// Constructors
+	Image(int width, int height);
+	Image(const char * filename);
 
-	}
+	// Methods
+	void setPixel(int i, int j, const RGBValue & rgb);
+	bool writeImage(const char * filename);
+
+	// Variabless
 	std::vector<float> _image;
 	int _width;
 	int _height;
 
-	bool writeImage(const char * filename);
 private:
+	// Private methods
 	bool readImage(const char * filename);
-};
-
-class Texture {
-public:
-	Texture(Image img) : _image_data(img)
-	{}
-	void convertBarycentricToTexCoord(float a, float b, Vec3Df* texcoords, float& tex_u, float& tex_v);
-	Vec3Df getColor(float u, float v);
-private:
-	Image _image_data;
 };
 
 #endif

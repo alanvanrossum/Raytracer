@@ -1,7 +1,15 @@
 #ifndef MAIN_header
 #define MAIN_header
+
+// Includes
+#include <stdlib.h>
+#include <math.h>
+#include <assert.h>
 #include <vector>
+#include "Vec3D.h"
+#include "raytracing.h"
 #include "mesh.h"
+#include "image.h"
 
 /////////////////
 // MAIN HEADER //

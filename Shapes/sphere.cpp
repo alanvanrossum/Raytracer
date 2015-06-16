@@ -11,7 +11,7 @@
 *
 * Constructor
 */
-Sphere::Sphere(Material material, Vec3Df origin, float radius) : Shape(material, origin), _radius(radius) {}
+Sphere::Sphere(Material &material, Vec3Df origin, float radius) : Shape(material, origin), _radius(radius) {}
 
 /**
 * Intersection method, returns if collided, and which color.
@@ -59,6 +59,13 @@ Vec3Df Sphere::shade(const Vec3Df& camPos, const Vec3Df& intersect, const Vec3Df
 	dir.normalize();
 	u = 0.5 + (atan2(dir[2], dir[0])) / (2 * M_PI);
 	v = 0.5 - asin(dir[1]) / M_PI;
+
+	// U || V can't be less than 0. @FIXME for correction.
+	if (u < 0)
+		u = 0;
+	if (v < 0)
+		v = 0;
+			
 	Vec3Df diffuse = this->_textureMap->getColor(u, v);
 	this->_material.set_Kd(diffuse[0], diffuse[1], diffuse[2]);
 	return Shape::shade(camPos, intersect, lightPos, normal);

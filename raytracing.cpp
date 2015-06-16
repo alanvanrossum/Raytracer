@@ -45,20 +45,29 @@ void init()
 	 */
 	Material earthmat;
 	earthmat.set_Kd(0.2f, 0.f, 0.f);
-	earthmat.set_Ks(0.2f, 0.2f, 0.2f);
+	earthmat.set_Ks(0.f, 0.f, 0.f);
 	earthmat.set_Ni(1.3f);
-	earthmat.set_Tr(0.5f);
+	earthmat.set_Tr(1.f);
 	earthmat.set_textureName("git/Meshes/Textures/earthmap1k.ppm");
 	Image earth_img("git/Meshes/Textures/earthmap1k.ppm");
 	Texture* earth_tex = new Texture(earth_img);
 	materials.push_back(earthmat);
+
+	Material redMat;
+	redMat.set_Kd(1.f, 0.f, 0.f);
+	materials.push_back(redMat);
+
+	Material whiteMat;
+	whiteMat.set_Kd(1.f, 1.f, 1.f);
+	materials.push_back(whiteMat);
+
 
 
 	/**
 	 * Shapes
 	 */
 	// Draw a red plane.
-	//shapes.push_back(new Plane(Vec3Df(1, 0, 0), Vec3Df(0, 0, 0), Vec3Df(0, 1, 0)));
+	shapes.push_back(new Plane(materials[2], Vec3Df(0.f, -.5f, 0.f), Vec3Df(0.f, 1.f, 0.f)));
 
 	// Draw a green sphere.
 	//shapes.push_back(new Sphere(Vec3Df(0, 1, 0), Vec3Df(0, 0, 0), .5f));
@@ -67,9 +76,13 @@ void init()
 	//shapes.push_back(new MyMesh(testMesh, Vec3Df(0, 0, 0)));
 
 	// A sphere with an earth map.
-	Shape* earth = new Sphere(materials[0], Vec3Df(0, 0, 0), .5f);
-	earth->setTexture(earth_tex);
-	shapes.push_back(earth);
+	Shape* earth1 = new Sphere(materials[0], Vec3Df(.5f, 0, 0), .5f);
+	earth1->setTexture(earth_tex);
+	shapes.push_back(earth1);
+
+	// A red sphere.
+	Shape* redSphere = new Sphere(materials[1], Vec3Df(-.5f, 0, 0), .5f);
+	shapes.push_back(redSphere);
 
 	/**
 	 * Lights

@@ -3,6 +3,8 @@
 
 #include "../Vec3D.h"
 #include "../mesh.h"
+#include "../material.h"
+#include "../texture.h"
 #include "../image.h"
 
 // EPSILON -> Used for rounding errors. (Margin)
@@ -101,7 +103,7 @@ class Plane : public Shape {
 class Sphere : public Shape {
 	public:
 		// Constructor
-		Sphere(Material material, Vec3Df origin, float radius);
+		Sphere(Material& material, Vec3Df origin, float radius);
 
 		// Inherited methods.
 		virtual bool intersection(const Vec3Df&, const Vec3Df&, Vec3Df&, Vec3Df&);

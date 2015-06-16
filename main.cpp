@@ -2,14 +2,8 @@
 #include <windows.h>
 #endif
 #include "main.h"
-#include <GL/glut.h>
-#include <stdlib.h>
-#include <math.h>
-#include <assert.h>
-#include "raytracing.h"
-#include "mesh.h"
 #include "traqueboule.h"
-#include "image.h"
+#include <GL/glut.h>
 
 /**
  * VARIABLE DEFINITION
