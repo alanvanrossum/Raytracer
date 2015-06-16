@@ -9,7 +9,7 @@
 #include "raytracing.h"
 #include "mesh.h"
 #include "traqueboule.h"
-#include "imageWriter.h"
+#include "image.h"
 
 /**
  * VARIABLE DEFINITION
@@ -248,4 +248,3 @@ void keyboard(unsigned char key, int x, int y)
 		}
 	}
 }
-

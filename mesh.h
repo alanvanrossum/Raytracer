@@ -43,6 +43,8 @@ class Material
             Tr_is_set_=m.Tr_is_set_; // transparency (use this value to trade off reflection/refraction
             illum_ = m.illum_;		
             name_=m.name_;
+			textureName_ = m.textureName_;
+			tex_is_set = m.tex_is_set;
             return (*this);
         };
 
@@ -55,11 +57,13 @@ class Material
             Ni_is_set_ = false;
             Tr_is_set_ = false;
             illum_is_set_=false;
+			tex_is_set = false;
+			textureName_ = "empty";
             name_="empty";
         }
 
         bool is_valid(void) const 
-        { return Kd_is_set_ || Ka_is_set_ || Ks_is_set_ || Tr_is_set_; }
+        { return tex_is_set || Kd_is_set_ || Ka_is_set_ || Ks_is_set_ || Tr_is_set_; }
 
         bool has_Kd(void) { return Kd_is_set_; }
         bool has_Ka(void) { return Ka_is_set_; }
@@ -68,6 +72,7 @@ class Material
         bool has_Ni(void) { return Ni_is_set_; }
         bool has_illum(void) { return illum_is_set_; }
         bool has_Tr(void) { return Tr_is_set_; }
+		bool has_tex(void) const { return tex_is_set; }
 
         void set_Kd( float r, float g, float b ) 
         { Kd_=Vec3Df(r,g,b); Kd_is_set_=true; }
@@ -90,10 +95,15 @@ class Material
         void set_Tr( float t )
         { Tr_=t;            Tr_is_set_=true; }
 
-        void set_textureName(const std::string & s)//name of the texture image file
-        {
-            textureName_=s;
-        }
+		void set_textureName(const std::string& s)//name of the texture image file
+		{
+			textureName_ = s; tex_is_set = true;
+		}
+
+		void set_normal_mapName(const std::string& s)
+		{
+			normal_mapName_ = s; normal_is_set = true;
+		}
 
 		void set_name(const std::string & s )
         { 
@@ -112,6 +122,11 @@ class Material
             return textureName_;
         }
 
+		const std::string & normal_mapName()
+		{
+			return normal_mapName_;
+		}
+
 		const std::string & name()//name of the material
         {
             return name_;
@@ -127,7 +142,8 @@ class Material
         int illum_;                     bool illum_is_set_;//illumination model
         float Tr_;         bool Tr_is_set_; // transperency
         std::string        name_;
-        std::string        textureName_;
+		std::string textureName_; bool tex_is_set;
+		std::string normal_mapName_; bool normal_is_set;
     };
 
 

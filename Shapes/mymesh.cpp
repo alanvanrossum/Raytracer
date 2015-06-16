@@ -9,17 +9,15 @@
  *
  * Constructor
  */
-MyMesh::MyMesh(Mesh mesh, Vec3Df origin) : Shape(Vec3Df(1,0,1), origin), _mesh(mesh) {}
+MyMesh::MyMesh(Mesh mesh, Vec3Df origin) : Shape(mesh.materials[0], origin), _mesh(mesh) {}
 
 /**
  * Intersection method for the whole mesh.
  */
-bool MyMesh::intersection(const Vec3Df& origin, const Vec3Df& direction, Vec3Df& new_origin, Vec3Df& new_direction, Vec3Df& color){
+bool MyMesh::intersection(const Vec3Df& origin, const Vec3Df& direction, Vec3Df& new_origin, Vec3Df& new_direction){
 	//
 	// See this for explanation: https://en.wikipedia.org/wiki/M%C3%B6ller%E2%80%93Trumbore_intersection_algorithm
 	//
-
-	color = _color;
 
 	// Closest triangle
 	float ClosestTriangle = FLT_MAX;
@@ -33,6 +31,7 @@ bool MyMesh::intersection(const Vec3Df& origin, const Vec3Df& direction, Vec3Df&
 	for (int i = 0; i < _mesh.triangles.size(); i++) {
 		if (intersection(_mesh.triangles[i], origin, direction, tmp_new_origin, tmp_new_direction)) {
 			if ((tmp_new_origin - origin).getLength() < ClosestTriangle) {
+				ClosestTriangle = (tmp_new_origin - origin).getLength();
 				new_origin = tmp_new_origin;
 				new_direction = tmp_new_direction;
 				hasIntersected = true;
@@ -105,6 +104,20 @@ void MyMesh::barycentric(const Triangle &triangle, const Vec3Df &p, float &a, fl
 
 	a = (d11 * d20 - d01 * d21) * invDenom;
 	b = (d00 * d21 - d01 * d20) * invDenom;
+}
+
+/**
+* Shading method specific for MyMesh.
+*/
+Vec3Df MyMesh::shade(const Vec3Df& camPos, const Vec3Df& intersect, const Vec3Df& lightPos, const Vec3Df& normal){
+	return Shape::shade(camPos, intersect, lightPos, normal);
+}
+
+/**
+* Refraction method specific for MyMesh.
+*/
+Vec3Df MyMesh::refract(const Vec3Df &normal, const Vec3Df &direction, const float &ni, float &fresnel){
+	return Shape::refract(normal, direction, ni, fresnel);
 }
 
 /**

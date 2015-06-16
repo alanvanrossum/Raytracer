@@ -1,6 +1,8 @@
 #include "shape.h"
 #include <GL/glut.h>
 
+#define M_PI 3.14159265358979323846
+
 /**
 * SHAPE: Sphere
 *
@@ -9,18 +11,15 @@
 *
 * Constructor
 */
-Sphere::Sphere(Vec3Df color, Vec3Df origin, float radius) : Shape(color, origin), _radius(radius) {}
+Sphere::Sphere(Material material, Vec3Df origin, float radius) : Shape(material, origin), _radius(radius) {}
 
 /**
 * Intersection method, returns if collided, and which color.
 */
-bool Sphere::intersection(const Vec3Df& origin, const Vec3Df& direction, Vec3Df& new_origin, Vec3Df& new_direction, Vec3Df& color){
+bool Sphere::intersection(const Vec3Df& origin, const Vec3Df& direction, Vec3Df& new_origin, Vec3Df& new_direction){
 	//
 	// See this for explantion of the formula: https://en.wikipedia.org/wiki/Line%E2%80%93sphere_intersection
 	//
-
-	// Set the color.
-	color = _color;
 
 	Vec3Df trans_origin = origin - this->_origin;
 	float a = Vec3Df::dotProduct(direction, direction);
@@ -49,13 +48,38 @@ bool Sphere::intersection(const Vec3Df& origin, const Vec3Df& direction, Vec3Df&
 }
 
 /**
+ * Shading method specific for sphere.
+ */
+Vec3Df Sphere::shade(const Vec3Df& camPos, const Vec3Df& intersect, const Vec3Df& lightPos, const Vec3Df& normal){
+	if (!_material.has_tex())
+		return Shape::shade(camPos, intersect, lightPos, normal);
+	float u, v;
+	Vec3Df mid = this->_origin;
+	Vec3Df dir = intersect - mid;
+	dir.normalize();
+	u = 0.5 + (atan2(dir[2], dir[0])) / (2 * M_PI);
+	v = 0.5 - asin(dir[1]) / M_PI;
+	Vec3Df diffuse = this->_textureMap->getColor(u, v);
+	this->_material.set_Kd(diffuse[0], diffuse[1], diffuse[2]);
+	return Shape::shade(camPos, intersect, lightPos, normal);
+}
+
+/**
+* Refraction method specific for sphere.
+*/
+Vec3Df Sphere::refract(const Vec3Df &normal, const Vec3Df &direction, const float &ni, float &fresnel) {
+	return Shape::refract(normal, direction, ni, fresnel);
+}
+
+/**
 * Draw function to view the plane in the viewport.
 */
 void Sphere::draw() {
 	glPushMatrix();
 
 	glTranslatef(this->_origin[0], this->_origin[1], this->_origin[2]);
-	glColor3f(this->_color[0], this->_color[1], this->_color[2]);
+	//glColor3f(this->_material.Kd()[0], this->_material.Kd()[1], this->_material.Kd()[2]);
+	glColor3f(1, 0, 0);
 	glutSolidSphere(this->_radius, 20, 20);
 
 	glPopMatrix();

@@ -6,11 +6,13 @@
 #include "raytracing.h"
 #include "main.h"
 #include "Shapes\shape.h"
+#include "image.h"
 
 /**
  * VARIABLES
  */
 std::vector<Shape*> shapes;
+std::vector<Material> materials;
 
 // Global variables to draw a debug ray trace.
 Vec3Df testRayOrigin;
@@ -34,22 +36,40 @@ void init()
 	//PLEASE ADAPT THE LINE BELOW TO THE FULL PATH OF THE dodgeColorTest.obj
 	//model, e.g., "C:/temp/myData/GraphicsIsFun/dodgeColorTest.obj", 
 	//otherwise the application will not load properly
-	Mesh testMesh;
-	testMesh.loadMesh("H:/Development/graphics/Project2015/git/cube.obj", true);
-	testMesh.computeVertexNormals();
+	//Mesh testMesh;
+	//testMesh.loadMesh("H:/Development/graphics/Project2015/git/cube.obj", true);
+	//testMesh.computeVertexNormals();
+
+	/**
+	 * Materials
+	 */
+	Material earthmat;
+	earthmat.set_Kd(0.2f, 0.f, 0.f);
+	earthmat.set_Ks(0.2f, 0.2f, 0.2f);
+	earthmat.set_Ni(1.3f);
+	earthmat.set_Tr(0.5f);
+	earthmat.set_textureName("git/Meshes/Textures/earthmap1k.ppm");
+	Image earth_img("git/Meshes/Textures/earthmap1k.ppm");
+	Texture* earth_tex = new Texture(earth_img);
+	materials.push_back(earthmat);
 
 
 	/**
 	 * Shapes
 	 */
 	// Draw a red plane.
-	shapes.push_back(new Plane(Vec3Df(1, 0, 0), Vec3Df(0, -1, 0), Vec3Df(0, 1, 0)));
+	//shapes.push_back(new Plane(Vec3Df(1, 0, 0), Vec3Df(0, 0, 0), Vec3Df(0, 1, 0)));
 
 	// Draw a green sphere.
-	shapes.push_back(new Sphere(Vec3Df(0, 1, 0), Vec3Df(0, 0, 0), .5f));
+	//shapes.push_back(new Sphere(Vec3Df(0, 1, 0), Vec3Df(0, 0, 0), .5f));
 
 	// Draw the model
-	shapes.push_back(new MyMesh(testMesh, Vec3Df(0, 0, 0)));
+	//shapes.push_back(new MyMesh(testMesh, Vec3Df(0, 0, 0)));
+
+	// A sphere with an earth map.
+	Shape* earth = new Sphere(materials[0], Vec3Df(0, 0, 0), .5f);
+	earth->setTexture(earth_tex);
+	shapes.push_back(earth);
 
 	/**
 	 * Lights
@@ -92,14 +112,11 @@ Vec3Df performRayTracing(const Vec3Df & origin, const Vec3Df & direction, unsign
 	if (level == max)
 		return Vec3Df(0, 0, 0);
 
-	// Color of the point.
-	Vec3Df color;
-
 	// The maximum depth.
 	float current_depth = FLT_MAX;
 
 	// True if a collision occured.
-	bool intersected = false;
+	bool hasIntersected = false;
 
 	// The new origin at the intersected point
 	Vec3Df new_origin;
@@ -107,35 +124,113 @@ Vec3Df performRayTracing(const Vec3Df & origin, const Vec3Df & direction, unsign
 	// The normal at the intersected point
 	Vec3Df new_direction;
 
+	// The object which is intersected.
+	Shape* intersectedShape = nullptr;
+
 	// Loop over all objects in the scene.
 	for (int i = 0; i < shapes.size(); i++) {
 
 		// Temp variables for the intersected function.
 		Vec3Df tmp_origin;
 		Vec3Df tmp_direction;
-		Vec3Df tmp_color;
 
-		if (shapes[i]->intersection(origin, direction, tmp_origin, tmp_direction, tmp_color)) {
+		if (shapes[i]->intersection(origin, direction, tmp_origin, tmp_direction)) {
 			// Check if the new depth is closer to the camera.
 			float depth = (tmp_origin - origin).getLength();
 			if (depth < current_depth) {
 
 				// We have intersected and are closer to the origin. This is the new next object to raytrace.
-				intersected = true;
+				hasIntersected = true;
 				current_depth = depth;
 				new_origin = tmp_origin;
 				new_direction = tmp_direction;
-				color = tmp_color;
+				intersectedShape = shapes[i]->getIntersectedShape();
 			}
 		}
 	}
 
 	// If no intersection happend, return black. (Color at infinity)
-	if (!intersected)
+	if (!hasIntersected)
 		return Vec3Df(0.f, 0.f, 0.f);
 
-	// Return the color of the intersected point.
-	return color;
+	// Dot product of the direction and new direction
+	double dotProduct = Vec3Df::dotProduct(direction, new_direction);
+
+	// Start with reflected and refracted colors both black.
+	Vec3Df reflectedColor = Vec3Df(0.f, 0.f, 0.f);
+	Vec3Df refractedColor = Vec3Df(0.f, 0.f, 0.f);
+	
+	// Initial reflection and refraction values.
+	float reflection = 1.0f;
+	float transmission = 1.0f;
+
+	// If it has a material we can do reflections and refractions.
+	if (intersectedShape->hasMaterial()) {
+		// Refraction
+		if (intersectedShape->getMaterial().has_Ni()) {
+			float niAir = 1.0f;
+			float fresnel = 0.f;
+
+			Vec3Df refract = intersectedShape->refract(new_direction, direction, niAir, fresnel);
+
+			reflection = fresnel;
+			transmission = 1 - fresnel;
+
+			float translucency = 0.f;
+			if (intersectedShape->getMaterial().has_Tr()) {
+				translucency = 1 - intersectedShape->getMaterial().Tr();
+				if (translucency > 0)
+					refractedColor = translucency * performRayTracing(new_origin + refract * EPSILON, refract, level + 1, max);
+			}
+		}
+
+		// Reflection
+		if (intersectedShape->getMaterial().has_Ks()) {
+			Vec3Df reflect = direction - 2 * dotProduct * new_direction;
+			if (reflection > 0)
+				reflectedColor = performRayTracing(new_origin, reflect, level + 1, max);
+		}
+	}
+
+	// The color of the intersected object for all lightsources.
+	Vec3Df directColor = Vec3Df(0.f, 0.f, 0.f);
+	Shape* shadowInt = nullptr;
+
+	// Calculate shadows. Multiple light sources. Transparant shadows.
+	for (unsigned int j = 0; j < MyLightPositions.size(); j++) {
+		Vec3Df lightDir = MyLightPositions[j] - new_origin;
+		float lightDist = lightDir.getLength();
+		bool intersection = false;
+
+		for (unsigned int i = 0; i < shapes.size(); i++) {
+			Vec3Df hit, stub2;
+			// Check whether there's an intersection between the hit point and the light source
+			if (shapes[i]->intersection(new_origin, lightDir, hit, stub2) && (hit - new_origin).getLength() < lightDist) {
+				intersection = true;
+				shadowInt = shapes[i]->getIntersectedShape();
+
+				if (!shadowInt->_material.has_Tr() || shadowInt->_material.Tr() == 1.0) {
+					// Intersected with an opaque object.
+					break;
+				}
+				else {
+					// Material is transparent
+					directColor += (1 - shapes[i]->getMaterial().Tr()) * intersectedShape->shade(origin, new_origin, MyLightPositions[j], new_direction);
+					// If it has an ambient color, it should let that color pass through.
+					if (shapes[i]->getMaterial().has_Ka() && shapes[i]->getMaterial().Ka() != Vec3Df(0.f, 0.f, 0.f)) {
+						directColor *= shapes[i]->getMaterial().Ka();
+					}
+				}
+			}
+		}
+		if (!intersection) {
+			// There was no intersection.
+			directColor += intersectedShape->shade(origin, new_origin, MyLightPositions[j], new_direction);
+		}
+	}
+	directColor /= MyLightPositions.size();
+
+	return directColor + reflection * reflectedColor + transmission * refractedColor;
 }
 
 

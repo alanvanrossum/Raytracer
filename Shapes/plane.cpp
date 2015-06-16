@@ -9,18 +9,15 @@
  *
  * Constructor
  */
-Plane::Plane(Vec3Df color, Vec3Df origin, Vec3Df coefficient) : Shape(color, origin), _coefficient(coefficient) {}
+Plane::Plane(Material material, Vec3Df origin, Vec3Df coefficient) : Shape(material, origin), _coefficient(coefficient) {}
 
 /**
 * Intersection method, returns if collided, and which color.
 */
-bool Plane::intersection(const Vec3Df& origin, const Vec3Df& direction, Vec3Df& new_origin, Vec3Df& new_direction, Vec3Df& color){
+bool Plane::intersection(const Vec3Df& origin, const Vec3Df& direction, Vec3Df& new_origin, Vec3Df& new_direction){
 	//
 	// See this for explanation: https://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection
 	//
-
-	// Set the color.
-	color = _color;
 	
 	// Normalize the coefficient
 	new_direction = _coefficient;
@@ -43,13 +40,28 @@ bool Plane::intersection(const Vec3Df& origin, const Vec3Df& direction, Vec3Df& 
 }
 
 /**
+* Shading method specific for plane.
+*/
+Vec3Df Plane::shade(const Vec3Df& camPos, const Vec3Df& intersect, const Vec3Df& lightPos, const Vec3Df& normal){
+	return Shape::shade(camPos, intersect, lightPos, normal);
+}
+
+/**
+* Refraction method specific for plane.
+*/
+Vec3Df Plane::refract(const Vec3Df &normal, const Vec3Df &direction, const float &ni, float &fresnel){
+	return Shape::refract(normal, direction, ni, fresnel);
+}
+
+/**
  * Draw function to view the plane in the viewport.
  */
 void Plane::draw() {
 	glPushMatrix();
 
 	glTranslatef(this->_origin[0], this->_origin[1], this->_origin[2]);
-	glColor3f(this->_color[0], this->_color[1], this->_color[2]);
+	//glColor3f(this->_material.Kd()[0], this->_material.Kd()[1], this->_material.Kd()[2]);
+	glColor3f(0, 1, 0);
 	glScalef(10, 0.4, 10);
 	glutSolidCube(1);
 
