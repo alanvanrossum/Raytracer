@@ -33,6 +33,9 @@ extern unsigned int WindowSize_Y;
 extern unsigned int ImageSize_X;
 extern unsigned int ImageSize_Y;
 
+// Loadbar
+static inline void loadbar(unsigned int, unsigned int, unsigned int);
+
 /**
  * Function declarations
  */

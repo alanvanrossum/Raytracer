@@ -44,45 +44,32 @@ void init()
 	 * Materials
 	 */
 	Material earthmat;
-	earthmat.set_Kd(0.2f, 0.f, 0.f);
-	earthmat.set_Ks(0.f, 0.f, 0.f);
-	earthmat.set_Ni(1.3f);
-	earthmat.set_Tr(1.f);
+	earthmat.set_Kd(0.2f, 0.f, 0.f);		// Diffuse
+	earthmat.set_Ks(0.2f, 0.2f, 0.2f);		// Specular
+	earthmat.set_Ni(1.3f);					// Index of refraction
+	earthmat.set_Tr(0.5f);					// 
 	earthmat.set_textureName("git/Meshes/Textures/earthmap1k.ppm");
 	Image earth_img("git/Meshes/Textures/earthmap1k.ppm");
 	Texture* earth_tex = new Texture(earth_img);
 	materials.push_back(earthmat);
 
-	Material redMat;
-	redMat.set_Kd(1.f, 0.f, 0.f);
-	materials.push_back(redMat);
-
-	Material whiteMat;
-	whiteMat.set_Kd(1.f, 1.f, 1.f);
-	materials.push_back(whiteMat);
-
-
+	Material plane_mat;
+	//plane_mat.set_Ka(0.2f,0.2f,0.2f);
+	plane_mat.set_Kd(1.f, 1.f, 1.f);
+	plane_mat.set_Ks(0.5f, 0.5f, 0.5f);
+	//plane_mat.set_Ni(1.7f); //glass refractive index;
+	plane_mat.set_Tr(1.f);
+	materials.push_back(plane_mat);
 
 	/**
 	 * Shapes
 	 */
-	// Draw a red plane.
-	shapes.push_back(new Plane(materials[2], Vec3Df(0.f, -.5f, 0.f), Vec3Df(0.f, 1.f, 0.f)));
+	Shape* earth = new Sphere(materials[0], Vec3Df(0.f, 0.f, 0.f), .5f);
+	earth->setTexture(earth_tex);
+	shapes.push_back(earth);
 
-	// Draw a green sphere.
-	//shapes.push_back(new Sphere(Vec3Df(0, 1, 0), Vec3Df(0, 0, 0), .5f));
+	shapes.push_back(new Plane(materials[1], Vec3Df(0.f, -.5f, 0.f), Vec3Df(0.f, 1.f, 0.f)));
 
-	// Draw the model
-	//shapes.push_back(new MyMesh(testMesh, Vec3Df(0, 0, 0)));
-
-	// A sphere with an earth map.
-	Shape* earth1 = new Sphere(materials[0], Vec3Df(.5f, 0, 0), .5f);
-	earth1->setTexture(earth_tex);
-	shapes.push_back(earth1);
-
-	// A red sphere.
-	Shape* redSphere = new Sphere(materials[1], Vec3Df(-.5f, 0, 0), .5f);
-	shapes.push_back(redSphere);
 
 	/**
 	 * Lights

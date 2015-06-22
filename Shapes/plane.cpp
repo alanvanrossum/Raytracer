@@ -9,7 +9,7 @@
  *
  * Constructor
  */
-Plane::Plane(Material material, Vec3Df origin, Vec3Df coefficient) : Shape(material, origin), _coefficient(coefficient) {}
+Plane::Plane(Material &material, Vec3Df origin, Vec3Df coefficient) : Shape(material, origin), _coefficient(coefficient) {}
 
 /**
 * Intersection method, returns if collided, and which color.
@@ -61,8 +61,8 @@ void Plane::draw() {
 
 	glTranslatef(this->_origin[0], this->_origin[1], this->_origin[2]);
 	//glColor3f(this->_material.Kd()[0], this->_material.Kd()[1], this->_material.Kd()[2]);
-	glColor3f(0, 1, 0);
-	glScalef(10, 0.4, 10);
+	glColor3f(0.f, 1.f, 0.f);
+	glScalef(100.f, 0.001f, 100.f);
 	glutSolidCube(1);
 
 	glPopMatrix();

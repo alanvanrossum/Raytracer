@@ -81,7 +81,7 @@ class Shape {
 class Plane : public Shape {
 	public:
 		// Constructor
-		Plane(Material material, Vec3Df origin, Vec3Df coefficient);
+		Plane(Material& material, Vec3Df origin, Vec3Df coefficient);
 
 		// Inherited methods.
 		virtual bool intersection(const Vec3Df&, const Vec3Df&, Vec3Df&, Vec3Df&);

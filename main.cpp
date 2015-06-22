@@ -4,6 +4,8 @@
 #include "main.h"
 #include "traqueboule.h"
 #include <GL/glut.h>
+#include <iomanip>
+#include <ostream>
 
 /**
  * VARIABLE DEFINITION
@@ -200,7 +202,7 @@ void keyboard(unsigned char key, int x, int y)
 			produceRay(WindowSize_X - 1, 0, &origin10, &dest10);
 			produceRay(WindowSize_X - 1, WindowSize_Y - 1, &origin11, &dest11);
 
-			for (unsigned int y = 0; y < WindowSize_Y; ++y)
+			for (unsigned int y = 0; y < WindowSize_Y; ++y) {
 				for (unsigned int x = 0; x < WindowSize_X; ++x)
 				{
 					// Produce the rays for each pixel, by interpolating 
@@ -219,7 +221,16 @@ void keyboard(unsigned char key, int x, int y)
 					result.setPixel(x, y, RGBValue(rgb[0], rgb[1], rgb[2]));
 				}
 
+				loadbar(y, WindowSize_Y, 50);
+			}
+
+			loadbar(WindowSize_Y, WindowSize_Y, 50);
+			cout << endl;
+			cout << endl;
+
 			result.writeImage("result.ppm");
+
+			cout << endl;
 			break;
 		}
 
@@ -241,4 +252,16 @@ void keyboard(unsigned char key, int x, int y)
 			yourKeyboardFunc(key, x, y, testRayOrigin, testRayDestination);
 		}
 	}
+}
+
+static inline void loadbar(unsigned int x, unsigned int n, unsigned int w = 50) {
+	if ((x != n) && (x % (n / 100 + 1) != 0)) return;
+
+	float ratio = x / (float)n;
+	int   c = ratio * w;
+
+	cout << std::setw(3) << (int)(ratio * 100) << "% [";
+	for (int x = 0; x<c; x++) cout << "=";
+	for (int x = c; x<w; x++) cout << " ";
+	cout << "]\r" << std::flush;
 }
