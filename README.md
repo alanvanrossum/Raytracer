@@ -13,3 +13,15 @@ Group 16 -- Ray Tracing
 | Wytze Elhorst     |             	|           |
 
 VUL HIERBOVEN JE NETID EN STUDENTID IN ALS JE SUCCESVOL HEBT GEGITHUBD
+
+### TODO
+	+ Technical
+		- Implement meshes.
+		- Fix refraction. (Glass sphere)
+		- Fix shadows.
+		- Implement depth of field.
+		
+	+ Non-Technical
+		- Create scene
+		- Create report
+		- Create presentation
