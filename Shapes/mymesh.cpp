@@ -53,9 +53,9 @@ bool MyMesh::intersection(const Triangle& triangle, const Vec3Df& origin, const 
 	Vec3Df u = _mesh.vertices[triangle.v[1]].p - _origin;
 	Vec3Df v = _mesh.vertices[triangle.v[2]].p - _origin;
 
-	//
-	// STEP 1: First calculate where the ray intersects the plane in which the triangle lies
-	//
+	/**
+	 * First calculate where the ray intersects the plane in which the triangle lies
+	 */
 	// Calculate the normal of the plane
 	Vec3Df planeNormal = Vec3Df::crossProduct(u, v);
 
@@ -69,23 +69,24 @@ bool MyMesh::intersection(const Triangle& triangle, const Vec3Df& origin, const 
 
 	Vec3Df p = origin + t * direction;
 
-	//
-	// STEP 2: Determine barycentric coordinates using Cramer's rule
-	//
+	/**
+	 * Second determine barycentric coordinates using Cramer's rule
+	 */
 	float a, b;
 	barycentric(triangle, p, a, b);
-	if (a < -EPSILON || b < -EPSILON || a + b > 1) return false;
+	if (a < -EPSILON || b < -EPSILON || a + b > 1)
+		return false;
 
-	//
-	// STEP 3: Interpolate the vertex normals using barycentric coordinates
-	//
+	/**
+	 * Third interpolate the vertex normals using barycentric coordinates
+	 */
 	new_direction = (1 - a - b) * _mesh.vertices[triangle.v[0]].n +
 		a * _mesh.vertices[triangle.v[1]].n +
 		b * _mesh.vertices[triangle.v[2]].n;
 	new_direction.normalize();
 	new_origin = p;
-	return true;
 
+	return true;
 }
 
 /**
@@ -107,22 +108,22 @@ void MyMesh::barycentric(const Triangle &triangle, const Vec3Df &p, float &a, fl
 }
 
 /**
-* Shading method specific for MyMesh.
-*/
+ * Shading method specific for MyMesh.
+ */
 Vec3Df MyMesh::shade(const Vec3Df& camPos, const Vec3Df& intersect, const Vec3Df& lightPos, const Vec3Df& normal){
 	return Shape::shade(camPos, intersect, lightPos, normal);
 }
 
 /**
-* Refraction method specific for MyMesh.
-*/
+ * Refraction method specific for MyMesh.
+ */
 Vec3Df MyMesh::refract(const Vec3Df &normal, const Vec3Df &direction, const float &ni, float &fresnel){
 	return Shape::refract(normal, direction, ni, fresnel);
 }
 
 /**
-* Draw function to view the plane in the viewport.
-*/
+ * Draw function to view the plane in the viewport.
+ */
 void MyMesh::draw() {
 	_mesh.draw();
 }

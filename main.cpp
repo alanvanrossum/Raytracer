@@ -187,7 +187,7 @@ void keyboard(unsigned char key, int x, int y)
 			cout << "Raytracing" << endl;
 
 			// Setup an image with the size of the current image.
-			Image result(WindowSize_X, WindowSize_Y);
+			Image result(ImageSize_X, ImageSize_Y);
 
 			// Produce the rays for each pixel, by first computing
 			// the rays for the corners of the frustum.
@@ -198,17 +198,17 @@ void keyboard(unsigned char key, int x, int y)
 			Vec3Df origin, dest;
 
 			produceRay(0, 0, &origin00, &dest00);
-			produceRay(0, WindowSize_Y - 1, &origin01, &dest01);
-			produceRay(WindowSize_X - 1, 0, &origin10, &dest10);
-			produceRay(WindowSize_X - 1, WindowSize_Y - 1, &origin11, &dest11);
+			produceRay(0, ImageSize_Y - 1, &origin01, &dest01);
+			produceRay(ImageSize_X - 1, 0, &origin10, &dest10);
+			produceRay(ImageSize_X - 1, ImageSize_Y - 1, &origin11, &dest11);
 
-			for (unsigned int y = 0; y < WindowSize_Y; ++y) {
-				for (unsigned int x = 0; x < WindowSize_X; ++x)
+			for (unsigned int y = 0; y < ImageSize_Y; ++y) {
+				for (unsigned int x = 0; x < ImageSize_X; ++x)
 				{
 					// Produce the rays for each pixel, by interpolating 
 					// the four rays of the frustum corners.
-					float xscale = 1.0f - float(x) / (WindowSize_X - 1);
-					float yscale = 1.0f - float(y) / (WindowSize_Y - 1);
+					float xscale = 1.0f - float(x) / (ImageSize_X - 1);
+					float yscale = 1.0f - float(y) / (ImageSize_Y - 1);
 
 					origin = yscale*(xscale*origin00 + (1 - xscale)*origin10) +
 						(1 - yscale)*(xscale*origin01 + (1 - xscale)*origin11);
@@ -221,10 +221,10 @@ void keyboard(unsigned char key, int x, int y)
 					result.setPixel(x, y, RGBValue(rgb[0], rgb[1], rgb[2]));
 				}
 
-				loadbar(y, WindowSize_Y, 50);
+				loadbar(y, ImageSize_Y, 50);
 			}
 
-			loadbar(WindowSize_Y, WindowSize_Y, 50);
+			loadbar(ImageSize_Y, ImageSize_Y, 50);
 			cout << endl;
 			cout << endl;
 
