@@ -28,7 +28,7 @@ bool MyMesh::intersection(const Vec3Df& origin, const Vec3Df& direction, Vec3Df&
 	// Has intersected
 	bool hasIntersected = false;
 
-	for (int i = 0; i < _mesh.triangles.size(); i++) {
+	for (size_t i = 0; i < _mesh.triangles.size(); i++) {
 		if (intersection(_mesh.triangles[i], origin, direction, tmp_new_origin, tmp_new_direction)) {
 			if ((tmp_new_origin - origin).getLength() < ClosestTriangle) {
 				ClosestTriangle = (tmp_new_origin - origin).getLength();
