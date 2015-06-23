@@ -1,2 +1,5 @@
 *.iml
 .idea/
+Debug/
+Release/
+Raytracer.*
