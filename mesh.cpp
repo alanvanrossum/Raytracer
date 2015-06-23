@@ -147,7 +147,7 @@ bool Mesh::loadMesh(const char * filename, bool randomizeTriangulation)
     memset(&s, 0, LINE_LEN);
 
     FILE * in;
-    in =fopen(filename,"r");
+	errno_t file_result = fopen_s(&in, filename, "r");
 
     while(in && !feof(in) && fgets(s, LINE_LEN, in))
     {     
@@ -192,7 +192,7 @@ bool Mesh::loadMesh(const char * filename, bool randomizeTriangulation)
         // vertex
         else if (strncmp(s, "v ", 2) == 0)
         {
-            sscanf(s, "v %f %f %f", &x, &y, &z);
+            sscanf_s(s, "v %f %f %f", &x, &y, &z);
             vertices.push_back(Vec3Df(x,y,z));
         }
 
@@ -204,7 +204,7 @@ bool Mesh::loadMesh(const char * filename, bool randomizeTriangulation)
 			Vec3Df texCoords(0,0,0);
 		
 			//we only support 2d tex coords
-            sscanf(s, "vt %f %f", &texCoords[0], &texCoords[1]);
+            sscanf_s(s, "vt %f %f", &texCoords[0], &texCoords[1]);
             texcoords.push_back(texCoords);
         }
         // normal
@@ -334,7 +334,7 @@ bool Mesh::loadMesh(const char * filename, bool randomizeTriangulation)
 bool Mesh::loadMtl(const char * filename, std::map<string, unsigned int> & materialIndex)
 {
     FILE * _in;
-    _in = fopen(filename, "r" );
+	errno_t file_result = fopen_s(&_in, filename, "r");
     if ( !_in )
     {
        printf("  Warning! Material file '%s' not found!\n", filename);
@@ -385,33 +385,33 @@ bool Mesh::loadMtl(const char * filename, std::map<string, unsigned int> & mater
         }
         else if (strncmp(line, "Kd ", 3)==0) // diffuse color
         {
-            sscanf(line, "Kd %f %f %f", &f1, &f2, &f3);
+            sscanf_s(line, "Kd %f %f %f", &f1, &f2, &f3);
             mat.set_Kd(f1,f2,f3);
         }
         else if (strncmp(line, "Ka ", 3)==0) // ambient color
         {
-            sscanf(line, "Ka %f %f %f", &f1, &f2, &f3);
+            sscanf_s(line, "Ka %f %f %f", &f1, &f2, &f3);
             mat.set_Ka(f1,f2,f3);
         }
         else if (strncmp(line, "Ks ", 3)==0) // specular color
         {
-            sscanf(line, "Ks %f %f %f", &f1, &f2, &f3);
+            sscanf_s(line, "Ks %f %f %f", &f1, &f2, &f3);
             mat.set_Ks(f1,f2,f3);
         }
         else if (strncmp(line, "Ns ", 3)==0) // Shininess [0..200]
         {
-            sscanf(line, "Ns %f", &f1);
+            sscanf_s(line, "Ns %f", &f1);
             mat.set_Ns(f1);
         }
         else if (strncmp(line, "Ni ", 3)==0) // Shininess [0..200]
         {
-            sscanf(line, "Ni %f", &f1);
+            sscanf_s(line, "Ni %f", &f1);
             mat.set_Ni(f1);
         }
         else if (strncmp(line, "illum ", 6)==0) // diffuse/specular shading model
         {
             int illum=-1;
-            sscanf(line, "illum %i", &illum);
+            sscanf_s(line, "illum %i", &illum);
             mat.set_illum(illum);
         }
         else if (strncmp(line, "map_Kd ",7)==0) // map images
@@ -433,12 +433,12 @@ bool Mesh::loadMtl(const char * filename, std::map<string, unsigned int> & mater
         }
         else if (strncmp(line, "Tr ", 3)==0 ) // transparency value
         {
-            sscanf(line, "Tr %f", &f1);
+            sscanf_s(line, "Tr %f", &f1);
             mat.set_Tr(f1);
         }
         else if (strncmp(line, "d ", 2)==0 ) // transparency value
         {
-            sscanf(line, "d %f", &f1);
+            sscanf_s(line, "d %f", &f1);
             mat.set_Tr(f1);
         }
 

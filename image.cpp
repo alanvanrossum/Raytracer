@@ -36,7 +36,7 @@ void Image::setPixel(int i, int j, const RGBValue & rgb) {
  */
 bool Image::writeImage(const char * filename) {
 	FILE* file;
-	file = fopen(filename, "wb");
+	errno_t file_result = fopen_s(&file, filename, "wb");
 	if (!file) {
 		printf("Dump file problem... file\n");
 		return false;
@@ -67,26 +67,26 @@ bool Image::writeImage(const char * filename) {
  */
 bool Image::readImage(const char * filename) {
 	FILE* file;
-	file = fopen(filename, "rb");
+	errno_t file_result = fopen_s(&file, filename, "rb");
 	if (!file) {
 		printf("ERROR: No file called %s!\n", filename);
 		return false;
 	}
-	char* type[2];
+
 	int width, height;
-	fscanf(file, "%*s\n");
+	fscanf_s(file, "%*s\n");
 	char buf[256];
 	while (fgets(buf, 256, file) && buf[0] == '#') {
 		printf(buf);
 	}
 
-	sscanf(buf, "%i %i\n", &width, &height);
-	fscanf(file, "255\n");
+	sscanf_s(buf, "%i %i\n", &width, &height);
+	fscanf_s(file, "255\n");
 	this->_width = width;
 	this->_height = height;
 	std::vector<unsigned char> imageC(width * height * 3);
 	int t = fread(&(imageC[0]), width * height * 3, 1, file);
-	for (int i = 0; i < imageC.size(); i++) {
+	for (size_t i = 0; i < imageC.size(); i++) {
 		_image.push_back((float)imageC[i] / 255.0f);
 	}
 	printf("Loaded texture %s\n", filename);

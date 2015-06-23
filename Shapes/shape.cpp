@@ -44,8 +44,8 @@ Vec3Df Shape::shade(const Vec3Df& camPos, const Vec3Df& intersection, const Vec3
 */
 Vec3Df Shape::refract(const Vec3Df &normal, const Vec3Df &direction, const float &ni, float &fresnel) {
 	if (this->_material.has_Ni()) {
-		double dot = Vec3Df::dotProduct(normal, direction);
-		double ni1, ni2;
+		float dot = Vec3Df::dotProduct(normal, direction);
+		float ni1, ni2;
 		Vec3Df realNormal = normal;
 
 		// If dot(N,D) > 0, then we're exiting the medium
@@ -57,8 +57,8 @@ Vec3Df Shape::refract(const Vec3Df &normal, const Vec3Df &direction, const float
 			// While we're at it, calculate Fresnel with Schlick's approximation.
 			// Do nothing in the else statement, as Fresnel is initialised to zero
 			// in the calling function.
-			float fzero = pow(((ni1 - ni2) / (ni1 + ni2)), 2);
-			fresnel = (fzero + (1 - fzero) * pow((1 - dot), 5)) / 100;
+			float fzero = powf(((ni1 - ni2) / (ni1 + ni2)), 2);
+			fresnel = (fzero + (1 - fzero) * powf((1 - dot), 5)) / 100;
 		}
 		else {
 			// FIXME: fresnel here too?
@@ -67,19 +67,19 @@ Vec3Df Shape::refract(const Vec3Df &normal, const Vec3Df &direction, const float
 			dot = Vec3Df::dotProduct(-normal, direction);
 
 
-			float fzero = pow(((ni1 - ni2) / (ni1 + ni2)), 2);
-			fresnel = (fzero + (1 - fzero) * pow((1 - dot), 5)) / 100;
+			float fzero = powf(((ni1 - ni2) / (ni1 + ni2)), 2);
+			fresnel = (fzero + (1 - fzero) * powf((1 - dot), 5)) / 100;
 		}
 
 		// If root < 0, total internal reflection takes place.
 		// In this case, the refraction vector should be black.
 		// Maybe we could integrate reflection here
-		double n = ni1 / ni2;
-		double root = 1.0 - n * n * (1.0 - dot * dot);
+		float n = ni1 / ni2;
+		float root = 1.0f - n * n * (1.0f - dot * dot);
 
 		if (root < 0) return direction - 2 * dot * realNormal;
 
-		return direction * n + (n * dot - sqrt(root)) * realNormal;
+		return direction * n + (n * dot - sqrtf(root)) * realNormal;
 	}
 
 	return Vec3Df(0, 0, 0);

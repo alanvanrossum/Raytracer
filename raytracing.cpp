@@ -128,7 +128,7 @@ Vec3Df performRayTracing(const Vec3Df & origin, const Vec3Df & direction, unsign
 	Shape* intersectedShape = nullptr;
 
 	// Loop over all objects in the scene.
-	for (int i = 0; i < shapes.size(); i++) {
+	for (size_t i = 0; i < shapes.size(); i++) {
 
 		// Temp variables for the intersected function.
 		Vec3Df tmp_origin;
@@ -248,7 +248,7 @@ void yourDebugDraw()
 	//MyMesh.draw();
 
 	// Draw all the shapes for the viewport window.
-	for (int i = 0; i < shapes.size(); i++) {
+	for (size_t i = 0; i < shapes.size(); i++) {
 		shapes[i]->draw();
 	}
 	
