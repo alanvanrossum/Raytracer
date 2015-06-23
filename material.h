@@ -27,6 +27,7 @@ class Material {
 		bool has_Ni();
 		bool has_illum();
 		bool has_Tr();
+		bool has_Tf();
 		bool has_tex() const;
 
 		// Set methods
@@ -37,6 +38,7 @@ class Material {
 		void set_Ni(float r);
 		void set_illum(int r);
 		void set_Tr(float t);
+		void set_Tf(float r, float g, float b);
 		void set_textureName(const std::string& s);
 		void set_normal_mapName(const std::string& s);
 		void set_name(const std::string & s);
@@ -49,6 +51,7 @@ class Material {
 		float Ns() const;
 		int illum()const;
 		float Tr() const;
+		const Vec3Df& Tf() const;
 		const std::string & textureName();
 		const std::string & normal_mapName();
 		const std::string & name();
@@ -62,6 +65,7 @@ class Material {
 		float Ni_;						// Refraction something...
 		int illum_;						// Illumination
 		float Tr_;						// Transparancy
+		Vec3Df Tf_;						// Transmission filter
 		std::string name_;				// Name of the material
 		std::string textureName_;		// Name of the textureMap (filePath + fileName)
 		std::string normal_mapName_;	// Name of the normalMap (filePath + fileName)
@@ -74,6 +78,7 @@ class Material {
 		bool Ni_is_set_;
 		bool illum_is_set_;
 		bool Tr_is_set_;
+		bool Tf_is_set_;
 		bool tex_is_set;
 		bool normal_is_set;
 };

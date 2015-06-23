@@ -457,6 +457,11 @@ bool Mesh::loadMtl(const char * filename, std::map<string, unsigned int> & mater
             sscanf_s(line, "Tr %f", &f1);
             mat.set_Tr(f1);
         }
+		else if (strncmp(line, "Tf ", 3) == 0) // Transmission filter
+		{
+			sscanf_s(line, "Tf %f %f %f", &f1, &f2, &f3);
+			mat.set_Tf(f1, f2, f3);
+		}
         else if (strncmp(line, "d ", 2)==0 ) // transparency value
         {
             sscanf_s(line, "d %f", &f1);

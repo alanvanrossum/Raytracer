@@ -39,42 +39,61 @@ void init()
 	//model, e.g., "C:/temp/myData/GraphicsIsFun/dodgeColorTest.obj", 
 	//otherwise the application will not load properly
 	
-	testMesh.loadMesh("H:/Development/graphics/Project2015/git/cube.obj", true);
+	testMesh.loadMesh("git/Meshes/cornellBox/cornellBoxMirrorTriangulated.obj", true);
 	testMesh.computeVertexNormals();
 
-	Shape* cube = new MyMesh(testMesh, Vec3Df(0.f, -0.5f, -2.f));
-	//shapes.push_back(cube);
+	Shape* cube = new MyMesh(testMesh, Vec3Df(0.f, -1.f, 1.f));
+	shapes.push_back(cube);
 
 	/**
 	 * Materials
 	 */
-
 	Material earthmat;
 	earthmat.set_Kd(0.2f, 0.f, 0.f);		// Diffuse
 	earthmat.set_Ks(0.2f, 0.2f, 0.2f);		// Specular
-	earthmat.set_Ni(1.3f);					// Index of refraction
-	earthmat.set_Tr(0.5f);					// 
+	//earthmat.set_Ni(1.3f);					// Index of refraction
+	//earthmat.set_Tr(0.5f);					// 
 	earthmat.set_textureName("git/Meshes/Textures/earthmap1k.ppm");
 	Image earth_img("git/Meshes/Textures/earthmap1k.ppm");
 	Texture* earth_tex = new Texture(earth_img);
 	materials.push_back(earthmat);
 
-	Material plane_mat;
+	//Material plane_mat;
 	//plane_mat.set_Ka(0.2f,0.2f,0.2f);
-	plane_mat.set_Kd(1.f, 1.f, 1.f);
+	//plane_mat.set_Kd(1.f, 1.f, 1.f);
 	//plane_mat.set_Ks(0.5f, 0.5f, 0.5f);
 	//plane_mat.set_Ni(1.7f); //glass refractive index;
 	//plane_mat.set_Tr(1.f);
-	materials.push_back(plane_mat);
+	//materials.push_back(plane_mat);
 
-	///**
-	// * Shapes
-	// */
-	Shape* earth = new Sphere(materials[0], Vec3Df(0.f, 0.f, 0.f), .5f);
-	earth->setTexture(earth_tex);
-	shapes.push_back(earth);
+	// Glass material
+	//Material glass;
+	//glass.set_Ka(0.01f, 0.01f, 0.01f);
+	//glass.set_Kd(0.01f, 0.01f, 0.01f);
+	//glass.set_Ks(0.95f, 0.95f, 0.95f);
+	//glass.set_illum(7);
+	//glass.set_Ni(2.5f);
+	//glass.set_Ns(200.f);
+	//glass.set_Tf(0.1f, 0.1f, 0.1f);
+	//glass.set_Tr(0.f);
+	//materials.push_back(glass);
 
-	shapes.push_back(new Plane(materials[1], Vec3Df(0.f, -.5f, 0.f), Vec3Df(0.f, 1.f, 0.f)));
+
+	/**
+	 * Shapes
+	 */
+	//Shape* earth = new Sphere(materials[0], Vec3Df(0.f, 0.f, -1.f), .5f);
+	//earth->setTexture(earth_tex);
+	//shapes.push_back(earth);
+
+	Shape* glassSphere = new Sphere(materials[0], Vec3Df(0.35f, -0.15f, 1.35f), .25f);
+	shapes.push_back(glassSphere);
+
+	//Shape* glassSphere = new Sphere(materials[2], Vec3Df(0.f, 0.f, 0.f), .5f);
+	//shapes.push_back(glassSphere);
+
+
+	//shapes.push_back(new Plane(materials[1], Vec3Df(0.f, -.5f, 0.f), Vec3Df(0.f, 1.f, 0.f)));
 
 
 	/**
@@ -82,6 +101,7 @@ void init()
 	 */
 	// One light at the starting camera position.
 	MyLightPositions.push_back(MyCameraPosition);
+	MyLightPositions.push_back(Vec3Df(0.f, .95f, .9f));
 }
 
 /**
@@ -185,8 +205,12 @@ Vec3Df performRayTracing(const Vec3Df & origin, const Vec3Df & direction, unsign
 			float translucency = 0.f;
 			if (intersectedShape->getMaterial().has_Tr()) {
 				translucency = 1 - intersectedShape->getMaterial().Tr();
-				if (translucency > 0)
+				if (translucency > 0) {
 					refractedColor = translucency * performRayTracing(new_origin + refract * EPSILON, refract, level + 1, max);
+
+					if (intersectedShape->getMaterial().has_Tf())
+						refractedColor *= intersectedShape->getMaterial().Tf();
+				}
 			}
 		}
 

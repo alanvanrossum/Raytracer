@@ -23,6 +23,10 @@ Material& Material::operator=(const Material & m) {
 
 	Tr_ = m.Tr_;
 	Tr_is_set_ = m.Tr_is_set_; // transparency (use this value to trade off reflection/refraction
+
+	Tf_ = m.Tf_;
+	Tf_is_set_ = m.Tf_is_set_; // Transmission filter
+
 	illum_ = m.illum_;
 	name_ = m.name_;
 	textureName_ = m.textureName_;
@@ -37,6 +41,7 @@ void Material::cleanup() {
 	Ns_is_set_ = false;
 	Ni_is_set_ = false;
 	Tr_is_set_ = false;
+	Tf_is_set_ = false;
 	illum_is_set_ = false;
 	tex_is_set = false;
 	name_ = "empty";
@@ -76,6 +81,10 @@ bool Material::has_Tr() {
 	return Tr_is_set_;
 }
 
+bool Material::has_Tf() {
+	return Tf_is_set_;
+}
+
 bool Material::has_tex() const {
 	return tex_is_set;
 }
@@ -111,6 +120,11 @@ void Material::set_Tr(float t) {
 	Tr_ = t;
 	Tr_is_set_ = true;
 }
+
+void Material::set_Tf(float r, float g, float b) {
+	Tf_ = Vec3Df(r, g, b); Tf_is_set_ = true;
+}
+
 
 void Material::set_textureName(const std::string& s) {
 	textureName_ = s;
@@ -153,6 +167,10 @@ int Material::illum()const {
 float Material::Tr() const {
 	return Tr_;
 }//can be hijacked, e.g., for transparency
+
+const Vec3Df& Material::Tf() const {
+	return Tf_;
+} // Transmission filter
 
 const std::string& Material::textureName()	{
 	return textureName_;
