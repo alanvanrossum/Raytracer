@@ -72,7 +72,7 @@ bool Image::readImage(const char * filename) {
 		printf("ERROR: No file called %s!\n", filename);
 		return false;
 	}
-	char* type[2];
+
 	int width, height;
 	fscanf_s(file, "%*s\n");
 	char buf[256];
