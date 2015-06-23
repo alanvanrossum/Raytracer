@@ -12,10 +12,17 @@ void Texture::convertBarycentricToTexCoord(float a, float b, Vec3Df* texcoords, 
 
 Vec3Df Texture::getColor(float tex_u, float tex_v) {
 	Vec3Df rgb(0.f, 0.f, 0.f);
-	float u = _image_data._width * tex_u - 1;
-	float v = _image_data._height * tex_v - 1;
+	int u = int(_image_data._width * tex_u) - 1;
+	int v = int(_image_data._height * tex_v) - 1;
+
+	// U || V !< 0
+	if (u < 0)
+		u = 0;
+	if (v < 0)
+		v = 0;
+
 	for (int i = 0; i < 3; i++) {
-		rgb[i] = _image_data._image[u * 3 + v * 3 * _image_data._width + i];
+		rgb[i] = _image_data._image[unsigned int(u * 3 + v * 3 * _image_data._width + i)];
 	}
 	return rgb;
 }

@@ -47,9 +47,13 @@ public:
         t[2] = t2.v[2];
         return (*this);
     }
-	//vertex position 
+
+	// Vertex position 
+	// Index of the vertices vector.
     unsigned int v[3];
-	//texture coordinate
+
+	// Texture coordinate
+	// Index of the texcoords vector.
     unsigned int t[3];
 };
 
@@ -64,28 +68,33 @@ public:
 	bool loadMtl(const char * filename, std::map<std::string, unsigned int> & materialIndex);
     void computeVertexNormals ();
     void draw();
+	void draw(Vec3Df);
     void drawSmooth();
 
-	//Vertices are the vertex positions, and normals of the mesh.
+	// Vertices are the vertex positions, and normals of the mesh.
 	std::vector<Vertex> vertices;
-	//texCoords are the texture coordinates, these are DIFFERENT indices in triangles.
-	//in the current version, if you use textures, then you have to use texture coords everywhere
-	//for convenience, Vec3Df is used, although only 2D tex coordinates are stored (x,y entry of the Vec3Df).
+
+	// TexCoords are the texture coordinates, these are DIFFERENT indices in triangles.
+	// in the current version, if you use textures, then you have to use texture coords everywhere
+	// for convenience, Vec3Df is used, although only 2D tex coordinates are stored (x,y entry of the Vec3Df).
 	std::vector<Vec3Df> texcoords;
-	//Triangles are the indices of the vertices involved in a triangle.
-	//A triangle, thus, contains a triplet of values corresponding to the 3 vertices of a triangle. 
+	
+	// Triangles are the indices of the vertices involved in a triangle.
+	// A triangle, thus, contains a triplet of values corresponding to the 3 vertices of a triangle. 
     std::vector<Triangle> triangles;
-	//These are the material properties
-	//each triangle (!), NOT (!) each vertex, has a material. 
-	//Use the triangle index to receive a material INDEX
+	
+	// These are the material properties
+	// each triangle (!), NOT (!) each vertex, has a material. 
+	// Use the triangle index to receive a material INDEX
 	std::vector<unsigned int> triangleMaterials;
-	//using the material index, you can then recover the material from this vector
-	//the class material is defined just above
+	
+	// using the material index, you can then recover the material from this vector
+	// the class material is defined just above
 	std::vector<Material> materials;
 	
-	//As an example:
-	//triangle triangles[i] has material index triangleMaterials[i]
-	//and uses Material materials[triangleMaterials[i]].
+	// As an example:
+	// triangle triangles[i] has material index triangleMaterials[i]
+	// and uses Material materials[triangleMaterials[i]].
 };
 
 #endif // MESH_H

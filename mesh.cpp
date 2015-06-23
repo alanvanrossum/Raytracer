@@ -90,6 +90,27 @@ void Mesh::draw(){
     glEnd();
 }
 
+void Mesh::draw(Vec3Df offset){
+	glBegin(GL_TRIANGLES);
+
+	for (unsigned int i = 0; i<triangles.size(); ++i)
+	{
+		unsigned int triMat = triangleMaterials.at(i);
+		Vec3Df col = this->materials.at(triMat).Kd();
+		glColor3fv(col.pointer());
+		Vec3Df edge01 = (vertices[triangles[i].v[1]].p + offset) - (vertices[triangles[i].v[0]].p + offset);
+		Vec3Df edge02 = (vertices[triangles[i].v[2]].p + offset) - (vertices[triangles[i].v[0]].p + offset);
+		Vec3Df n = Vec3Df::crossProduct(edge01, edge02);
+		n.normalize();
+		glNormal3f(n[0], n[1], n[2]);
+		for (int v = 0; v < 3; v++){
+			glVertex3f(vertices[triangles[i].v[v]].p[0] + offset[0], vertices[triangles[i].v[v]].p[1] + offset[1], vertices[triangles[i].v[v]].p[2] + offset[2]);
+		}
+
+	}
+	glEnd();
+}
+
     
     
     

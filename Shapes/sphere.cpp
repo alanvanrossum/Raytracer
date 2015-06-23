@@ -30,7 +30,7 @@ bool Sphere::intersection(const Vec3Df& origin, const Vec3Df& direction, Vec3Df&
 	if (disc < 0)	return false;
 
 	// Quadratic formula.
-	float q = (b > 0) ? -0.5 * (b + sqrtf(disc)) : -0.5 * (b - sqrtf(disc));
+	float q = (b > 0.f) ? -0.5f * (b + sqrtf(disc)) : -0.5f * (b - sqrtf(disc));
 	float t0 = q / a;
 	float t1 = c / q;
 	if (t0 < t1) std::swap(t0, t1);
@@ -57,8 +57,8 @@ Vec3Df Sphere::shade(const Vec3Df& camPos, const Vec3Df& intersect, const Vec3Df
 	Vec3Df mid = this->_origin;
 	Vec3Df dir = intersect - mid;
 	dir.normalize();
-	u = 0.5 + (atan2(dir[2], dir[0])) / (2 * M_PI);
-	v = 0.5 - asin(dir[1]) / M_PI;
+	u = 0.5f + (atan2(dir[2], dir[0])) / (2.f * float(M_PI));
+	v = 0.5f - asin(dir[1]) / float(M_PI);
 
 	// U || V can't be less than 0. @FIXME for correction.
 	if (u < 0)

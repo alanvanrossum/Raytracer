@@ -120,6 +120,28 @@ class Sphere : public Shape {
 };
 
 /**
+ * Triangle
+ */
+class TriangleShape : public Shape {
+	public:
+		// Constructor
+		TriangleShape(Material& material, Triangle &triangle);
+
+		// Inherited methods.
+		virtual bool intersection(const Vec3Df&, const Vec3Df&, Vec3Df&, Vec3Df&);
+		virtual Vec3Df shade(const Vec3Df&, const Vec3Df&, const Vec3Df&, const Vec3Df&);
+		virtual Vec3Df refract(const Vec3Df&, const Vec3Df&, const float&, float&);
+
+		virtual Shape* getIntersectedShape() { return  this; }
+
+		// Draw method
+		virtual void draw();
+
+		// Triangle
+		Triangle &_triangle;
+};
+
+/**
  * Mesh
  */
 class MyMesh : public Shape {
@@ -133,7 +155,7 @@ public:
 	virtual Vec3Df shade(const Vec3Df&, const Vec3Df&, const Vec3Df&, const Vec3Df&);
 	virtual Vec3Df refract(const Vec3Df&, const Vec3Df&, const float&, float&);
 
-	virtual Shape* getIntersectedShape() { return  this; }
+	virtual Shape* getIntersectedShape() { return  _lastIntersectedTriangle; }
 
 	// Methods special to this class
 	void barycentric(const Triangle &triangle, const Vec3Df &p, float &a, float &b);
@@ -142,6 +164,9 @@ public:
 	virtual void draw();
 
 	// Variables
+
+	// Last intersected triangle
+	TriangleShape *_lastIntersectedTriangle;
 	
 	// Pointer to the mesh.
 	Mesh _mesh;

@@ -35,6 +35,10 @@ bool MyMesh::intersection(const Vec3Df& origin, const Vec3Df& direction, Vec3Df&
 				new_origin = tmp_new_origin;
 				new_direction = tmp_new_direction;
 				hasIntersected = true;
+
+				TriangleShape* triangleShape = new TriangleShape(_mesh.materials[_mesh.triangleMaterials[i]], _mesh.triangles[i]);
+				// New last intersected triangle.
+				_lastIntersectedTriangle = triangleShape;
 			}
 		}
 	}
@@ -50,8 +54,8 @@ bool MyMesh::intersection(const Triangle& triangle, const Vec3Df& origin, const 
 	// See this for explanation: https://en.wikipedia.org/wiki/M%C3%B6ller%E2%80%93Trumbore_intersection_algorithm
 	//
 
-	Vec3Df u = _mesh.vertices[triangle.v[1]].p - _origin;
-	Vec3Df v = _mesh.vertices[triangle.v[2]].p - _origin;
+	Vec3Df u = (_mesh.vertices[triangle.v[1]].p + _origin) - (_mesh.vertices[triangle.v[0]].p + _origin);
+	Vec3Df v = (_mesh.vertices[triangle.v[2]].p + _origin) - (_mesh.vertices[triangle.v[0]].p + _origin);
 
 	/**
 	 * First calculate where the ray intersects the plane in which the triangle lies
@@ -64,8 +68,9 @@ bool MyMesh::intersection(const Triangle& triangle, const Vec3Df& origin, const 
 	if (denom > -EPSILON && denom < EPSILON) return false;
 
 	// Calculate term t in the expressen 'p = o + tD'
-	float t = Vec3Df::dotProduct(_origin - origin, planeNormal) / denom;
-	if (t < EPSILON) return false;
+	float t = Vec3Df::dotProduct((_mesh.vertices[triangle.v[0]].p + _origin) - origin, planeNormal) / denom;
+	if (t < EPSILON)
+		return false;
 
 	Vec3Df p = origin + t * direction;
 
@@ -80,9 +85,9 @@ bool MyMesh::intersection(const Triangle& triangle, const Vec3Df& origin, const 
 	/**
 	 * Third interpolate the vertex normals using barycentric coordinates
 	 */
-	new_direction = (1 - a - b) * _mesh.vertices[triangle.v[0]].n +
-		a * _mesh.vertices[triangle.v[1]].n +
-		b * _mesh.vertices[triangle.v[2]].n;
+	new_direction = (1 - a - b) * (_mesh.vertices[triangle.v[0]].n + _origin) +
+		a * (_mesh.vertices[triangle.v[1]].n + _origin) +
+		b * (_mesh.vertices[triangle.v[2]].n + _origin);
 	new_direction.normalize();
 	new_origin = p;
 
@@ -93,15 +98,15 @@ bool MyMesh::intersection(const Triangle& triangle, const Vec3Df& origin, const 
  * Calculate the barycentric coordinates.
  */
 void MyMesh::barycentric(const Triangle &triangle, const Vec3Df &p, float &a, float &b) {
-	Vec3Df u = _mesh.vertices[triangle.v[1]].p - _origin;
-	Vec3Df v = _mesh.vertices[triangle.v[2]].p - _origin;
+	Vec3Df u = (_mesh.vertices[triangle.v[1]].p + _origin) - (_mesh.vertices[triangle.v[0]].p + _origin);
+	Vec3Df v = (_mesh.vertices[triangle.v[2]].p + _origin) - (_mesh.vertices[triangle.v[0]].p + _origin);
 
 	float d00 = Vec3Df::dotProduct(u, u);
 	float d01 = Vec3Df::dotProduct(u, v);
 	float d11 = Vec3Df::dotProduct(v, v);
-	float d20 = Vec3Df::dotProduct(p - _origin, u);
-	float d21 = Vec3Df::dotProduct(p - _origin, v);
-	float invDenom = 1.0 / (d00 * d11 - d01 * d01);
+	float d20 = Vec3Df::dotProduct(p - (_mesh.vertices[triangle.v[0]].p + _origin), u);
+	float d21 = Vec3Df::dotProduct(p - (_mesh.vertices[triangle.v[0]].p + _origin), v);
+	float invDenom = 1.f / (d00 * d11 - d01 * d01);
 
 	a = (d11 * d20 - d01 * d21) * invDenom;
 	b = (d00 * d21 - d01 * d20) * invDenom;
@@ -125,5 +130,5 @@ Vec3Df MyMesh::refract(const Vec3Df &normal, const Vec3Df &direction, const floa
  * Draw function to view the plane in the viewport.
  */
 void MyMesh::draw() {
-	_mesh.draw();
+	_mesh.draw(_origin);
 }

@@ -18,6 +18,8 @@ std::vector<Material> materials;
 Vec3Df testRayOrigin;
 Vec3Df testRayDestination;
 
+Mesh testMesh;
+
 /**
  * INIT
  *
@@ -36,13 +38,17 @@ void init()
 	//PLEASE ADAPT THE LINE BELOW TO THE FULL PATH OF THE dodgeColorTest.obj
 	//model, e.g., "C:/temp/myData/GraphicsIsFun/dodgeColorTest.obj", 
 	//otherwise the application will not load properly
-	//Mesh testMesh;
-	//testMesh.loadMesh("H:/Development/graphics/Project2015/git/cube.obj", true);
-	//testMesh.computeVertexNormals();
+	
+	testMesh.loadMesh("H:/Development/graphics/Project2015/git/cube.obj", true);
+	testMesh.computeVertexNormals();
+
+	Shape* cube = new MyMesh(testMesh, Vec3Df(0.f, -0.5f, -2.f));
+	shapes.push_back(cube);
 
 	/**
 	 * Materials
 	 */
+
 	Material earthmat;
 	earthmat.set_Kd(0.2f, 0.f, 0.f);		// Diffuse
 	earthmat.set_Ks(0.2f, 0.2f, 0.2f);		// Specular
@@ -61,9 +67,9 @@ void init()
 	plane_mat.set_Tr(1.f);
 	materials.push_back(plane_mat);
 
-	/**
-	 * Shapes
-	 */
+	///**
+	// * Shapes
+	// */
 	Shape* earth = new Sphere(materials[0], Vec3Df(0.f, 0.f, 0.f), .5f);
 	earth->setTexture(earth_tex);
 	shapes.push_back(earth);
@@ -154,7 +160,7 @@ Vec3Df performRayTracing(const Vec3Df & origin, const Vec3Df & direction, unsign
 		return Vec3Df(0.f, 0.f, 0.f);
 
 	// Dot product of the direction and new direction
-	double dotProduct = Vec3Df::dotProduct(direction, new_direction);
+	float dotProduct = Vec3Df::dotProduct(direction, new_direction);
 
 	// Start with reflected and refracted colors both black.
 	Vec3Df reflectedColor = Vec3Df(0.f, 0.f, 0.f);
@@ -186,7 +192,7 @@ Vec3Df performRayTracing(const Vec3Df & origin, const Vec3Df & direction, unsign
 
 		// Reflection
 		if (intersectedShape->getMaterial().has_Ks()) {
-			Vec3Df reflect = direction - 2 * dotProduct * new_direction;
+			Vec3Df reflect = direction - 2.f * dotProduct * new_direction;
 			if (reflection > 0)
 				reflectedColor = performRayTracing(new_origin, reflect, level + 1, max);
 		}
@@ -228,7 +234,7 @@ Vec3Df performRayTracing(const Vec3Df & origin, const Vec3Df & direction, unsign
 			directColor += intersectedShape->shade(origin, new_origin, MyLightPositions[j], new_direction);
 		}
 	}
-	directColor /= MyLightPositions.size();
+	directColor /= float(MyLightPositions.size());
 
 	return directColor + reflection * reflectedColor + transmission * refractedColor;
 }
@@ -245,7 +251,7 @@ void yourDebugDraw()
 	//this function is called every frame
 
 	//let's draw the mesh
-	//MyMesh.draw();
+	//testMesh.draw();
 
 	// Draw all the shapes for the viewport window.
 	for (size_t i = 0; i < shapes.size(); i++) {
