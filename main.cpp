@@ -24,6 +24,9 @@ unsigned int WindowSize_Y = 800;
 unsigned int ImageSize_X = WindowSize_X;
 unsigned int ImageSize_Y = WindowSize_Y;
 
+// Number of samples.
+unsigned int ns = 4;
+
 /**
  * Main function, which is drawing an image (frame) on the screen.
  *
@@ -217,6 +220,69 @@ void keyboard(unsigned char key, int x, int y)
 
 					// Launch raytracing for the given ray.
 					Vec3Df rgb = performRayTracing(origin, dest);
+					// Store the result in an image 
+					result.setPixel(x, y, RGBValue(rgb[0], rgb[1], rgb[2]));
+				}
+
+				loadbar(y, ImageSize_Y, 50);
+			}
+
+			loadbar(ImageSize_Y, ImageSize_Y, 50);
+			cout << endl;
+			cout << endl;
+
+			result.writeImage("result.ppm");
+
+			cout << endl;
+			break;
+		}
+
+		// Pressing s will launch the raytracing with sampling.
+		case 's':
+		{
+			cout << "Raytracing with sampling" << endl;
+
+			// Setup an image with the size of the current image.
+			Image result(ImageSize_X, ImageSize_Y);
+
+			// Produce the rays for each pixel, by first computing
+			// the rays for the corners of the frustum.
+			Vec3Df origin00, dest00;
+			Vec3Df origin01, dest01;
+			Vec3Df origin10, dest10;
+			Vec3Df origin11, dest11;
+			Vec3Df origin, dest;
+
+			produceRay(0, 0, &origin00, &dest00);
+			produceRay(0, ImageSize_Y - 1, &origin01, &dest01);
+			produceRay(ImageSize_X - 1, 0, &origin10, &dest10);
+			produceRay(ImageSize_X - 1, ImageSize_Y - 1, &origin11, &dest11);
+			
+			Vec3Df rgb;
+
+			for (unsigned int y = 0; y < ImageSize_Y; ++y) {
+				for (unsigned int x = 0; x < ImageSize_X; ++x)
+				{
+					// Produce the rays for each pixel, by interpolating 
+					// the four rays of the frustum corners.
+					float xscale; // = 1.0f - float(x) / (ImageSize_X - 1);
+					float yscale; // = 1.0f - float(y) / (ImageSize_Y - 1);
+
+					for (unsigned int sx = 0; sx < ns; sx++) {
+						for (unsigned int sy = 0; sy < ns; sy++) {
+							xscale = 1.0f - (x + (sx + 0.5f) / ns) / (ImageSize_X - 1);
+							yscale = 1.0f - (y + (sy + 0.5f) / ns) / (ImageSize_Y - 1);
+
+							origin = yscale*(xscale*origin00 + (1 - xscale)*origin10) + (1 - yscale)*(xscale*origin01 + (1 - xscale)*origin11);
+							dest = yscale*(xscale*dest00 + (1 - xscale)*dest10) + (1 - yscale)*(xscale*dest01 + (1 - xscale)*dest11);
+
+							// Launch raytracing for the given ray.
+							rgb += performRayTracing(origin, dest);
+						}
+					}
+					
+					rgb /= float(ns*ns);
+
 					// Store the result in an image 
 					result.setPixel(x, y, RGBValue(rgb[0], rgb[1], rgb[2]));
 				}

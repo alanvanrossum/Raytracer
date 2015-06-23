@@ -43,7 +43,7 @@ void init()
 	testMesh.computeVertexNormals();
 
 	Shape* cube = new MyMesh(testMesh, Vec3Df(0.f, -0.5f, -2.f));
-	shapes.push_back(cube);
+	//shapes.push_back(cube);
 
 	/**
 	 * Materials
@@ -62,9 +62,9 @@ void init()
 	Material plane_mat;
 	//plane_mat.set_Ka(0.2f,0.2f,0.2f);
 	plane_mat.set_Kd(1.f, 1.f, 1.f);
-	plane_mat.set_Ks(0.5f, 0.5f, 0.5f);
+	//plane_mat.set_Ks(0.5f, 0.5f, 0.5f);
 	//plane_mat.set_Ni(1.7f); //glass refractive index;
-	plane_mat.set_Tr(1.f);
+	//plane_mat.set_Tr(1.f);
 	materials.push_back(plane_mat);
 
 	///**
