@@ -204,9 +204,8 @@ Vec3Df performRayTracing(const Vec3Df & origin, const Vec3Df & direction, unsign
 			reflection = fresnel;
 			transmission = 1 - fresnel;
 
-			float translucency = 0.f;
 			if (intersectedShape->getMaterial().has_Tr()) {
-				translucency = 1 - intersectedShape->getMaterial().Tr();
+				float translucency = 1 - intersectedShape->getMaterial().Tr();
 				if (translucency > 0) {
 					refractedColor = translucency * performRayTracing(new_origin + refract * EPSILON, refract, level + 1, max);
 
