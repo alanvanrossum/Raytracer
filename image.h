@@ -30,7 +30,7 @@ class Image
 public:
 	// Constructors
 	Image(int width, int height);
-	Image(const char * filename);
+	explicit Image(const char * filename);
 
 	// Methods
 	void setPixel(int i, int j, const RGBValue & rgb);
