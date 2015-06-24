@@ -217,7 +217,7 @@ Vec3Df performRayTracing(const Vec3Df & origin, const Vec3Df & direction, unsign
 		if (intersectedShape->getMaterial().has_Ks()) {
 			Vec3Df reflect = direction - 2.f * dotProduct * new_direction;
 			if (reflection > 0)
-				reflectedColor = performRayTracing(new_origin, reflect, level + 1, max);
+				reflectedColor = performRayTracing(new_origin, reflect, level + 1, max) * intersectedShape->getMaterial().Ks();
 		}
 	}
 
