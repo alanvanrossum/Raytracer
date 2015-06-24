@@ -21,8 +21,8 @@ unsigned int WindowSize_X = 800;
 unsigned int WindowSize_Y = 800;
 
 // Raytraced image size
-unsigned int ImageSize_X = 2000;
-unsigned int ImageSize_Y = 2000;
+unsigned int ImageSize_X = 800;
+unsigned int ImageSize_Y = 800;
 
 // Number of samples.
 unsigned int ns = 4;
@@ -260,7 +260,10 @@ void keyboard(unsigned char key, int x, int y)
 			
 			Vec3Df rgb;
 
-			for (unsigned int y = 0; y < ImageSize_Y; ++y) {
+			unsigned int fromY = 0;
+			unsigned int toY = 100;
+
+			for (unsigned int y = fromY; y < toY; ++y) {
 				for (unsigned int x = 0; x < ImageSize_X; ++x)
 				{
 					// Produce the rays for each pixel, by interpolating 
@@ -287,10 +290,10 @@ void keyboard(unsigned char key, int x, int y)
 					result.setPixel(x, y, RGBValue(rgb[0], rgb[1], rgb[2]));
 				}
 
-				loadbar(y, ImageSize_Y, 50);
+				loadbar(y-fromY, toY-fromY, 50);
 			}
 
-			loadbar(ImageSize_Y, ImageSize_Y, 50);
+			loadbar(toY - fromY, toY - fromY, 50);
 			cout << endl;
 			cout << endl;
 

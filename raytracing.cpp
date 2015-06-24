@@ -58,13 +58,11 @@ void init()
 	Texture* earth_tex = new Texture(earth_img);
 	materials.push_back(earthmat);
 
-	//Material plane_mat;
-	//plane_mat.set_Ka(0.2f,0.2f,0.2f);
-	//plane_mat.set_Kd(1.f, 1.f, 1.f);
-	//plane_mat.set_Ks(0.5f, 0.5f, 0.5f);
-	//plane_mat.set_Ni(1.7f); //glass refractive index;
-	//plane_mat.set_Tr(1.f);
-	//materials.push_back(plane_mat);
+	Material plane_mat;
+	plane_mat.set_Ka(0.0f,0.0f,0.0f);
+	plane_mat.set_Kd(0.f, 0.f, 0.f);
+	plane_mat.set_Ks(1.f, 1.f, 1.f);
+	materials.push_back(plane_mat);
 
 	// Glass material
 	//Material glass;
@@ -82,12 +80,13 @@ void init()
 	/**
 	 * Shapes
 	 */
-	//Shape* earth = new Sphere(materials[0], Vec3Df(0.f, 0.f, -1.f), .5f);
-	//earth->setTexture(earth_tex);
-	//shapes.push_back(earth);
+	Shape* earth = new Sphere(materials[0], Vec3Df(0.35f, -0.15f, 1.35f), .25f);
+	//Shape* earth = new Sphere(materials[0], Vec3Df(0.f, 0.f, 0.f), .5f);
+	earth->setTexture(earth_tex);
+	shapes.push_back(earth);
 
-	Shape* glassSphere = new Sphere(materials[0], Vec3Df(0.35f, -0.15f, 1.35f), .25f);
-	shapes.push_back(glassSphere);
+	//Shape* glassSphere = new Sphere(materials[0], Vec3Df(0.35f, -0.15f, 1.35f), .25f);
+	//shapes.push_back(glassSphere);
 
 	//Shape* glassSphere = new Sphere(materials[2], Vec3Df(0.f, 0.f, 0.f), .5f);
 	//shapes.push_back(glassSphere);
@@ -101,7 +100,7 @@ void init()
 	 */
 	// One light at the starting camera position.
 	MyLightPositions.push_back(MyCameraPosition);
-	MyLightPositions.push_back(Vec3Df(0.f, .95f, .9f));
+	MyLightPositions.push_back(Vec3Df(0.f, .90f, .9f));
 }
 
 /**
