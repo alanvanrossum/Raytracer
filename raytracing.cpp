@@ -88,8 +88,8 @@ void init()
 	//Shape* glassSphere = new Sphere(materials[0], Vec3Df(0.35f, -0.15f, 1.35f), .25f);
 	//shapes.push_back(glassSphere);
 
-	//Shape* glassSphere = new Sphere(materials[2], Vec3Df(0.f, 0.f, 0.f), .5f);
-	//shapes.push_back(glassSphere);
+	Shape* glassSphere = new Sphere(materials[1], Vec3Df(-0.3f, 0.45f, 0.7f), .25f);
+	shapes.push_back(glassSphere);
 
 
 	//shapes.push_back(new Plane(materials[1], Vec3Df(0.f, -.5f, 0.f), Vec3Df(0.f, 1.f, 0.f)));
