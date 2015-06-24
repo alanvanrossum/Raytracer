@@ -53,8 +53,8 @@ void init()
 	earthmat.set_Ks(0.2f, 0.2f, 0.2f);		// Specular
 	//earthmat.set_Ni(1.3f);					// Index of refraction
 	//earthmat.set_Tr(0.5f);					// 
-	earthmat.set_textureName("git/Meshes/Textures/earthmap1k.ppm");
-	Image earth_img("git/Meshes/Textures/earthmap1k.ppm");
+	earthmat.set_textureName("git/Meshes/Textures/moon.ppm");
+	Image earth_img("git/Meshes/Textures/moon.ppm");
 	Texture* earth_tex = new Texture(earth_img);
 	materials.push_back(earthmat);
 
@@ -88,8 +88,11 @@ void init()
 	//Shape* glassSphere = new Sphere(materials[0], Vec3Df(0.35f, -0.15f, 1.35f), .25f);
 	//shapes.push_back(glassSphere);
 
-	Shape* glassSphere = new Sphere(materials[1], Vec3Df(-0.3f, 0.45f, 0.7f), .25f);
-	shapes.push_back(glassSphere);
+	Shape* mirrorSphere = new Sphere(materials[1], Vec3Df(-0.3f, 0.45f, 0.7f), .25f);
+	shapes.push_back(mirrorSphere);
+
+	Shape* mirrorSphere1 = new Sphere(materials[1], Vec3Df(-0.5f, -.75f, 1.4f), .25f);
+	shapes.push_back(mirrorSphere1);
 
 
 	//shapes.push_back(new Plane(materials[1], Vec3Df(0.f, -.5f, 0.f), Vec3Df(0.f, 1.f, 0.f)));
@@ -121,7 +124,7 @@ Vec3Df performRayTracing(const Vec3Df & origin, const Vec3Df & destination)
 
 	// Return the ray tracing function which uses origin and direction.
 	// Level start at 0, max 5.
-	return performRayTracing(origin, direction, 0, 5);
+	return performRayTracing(origin, direction, 0, 10);
 }
 
 /**
