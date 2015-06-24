@@ -39,7 +39,7 @@ void init()
 	//model, e.g., "C:/temp/myData/GraphicsIsFun/dodgeColorTest.obj", 
 	//otherwise the application will not load properly
 	
-	testMesh.loadMesh("git/Meshes/cornellBox/cornellBoxMirrorTriangulated.obj", true);
+	testMesh.loadMesh("Meshes/cornellBox/cornellBoxMirrorTriangulated.obj", true);
 	testMesh.computeVertexNormals();
 
 	Shape* cube = new MyMesh(testMesh, Vec3Df(0.f, -1.f, 1.f));
@@ -53,8 +53,8 @@ void init()
 	earthmat.set_Ks(0.2f, 0.2f, 0.2f);		// Specular
 	//earthmat.set_Ni(1.3f);					// Index of refraction
 	//earthmat.set_Tr(0.5f);					// 
-	earthmat.set_textureName("git/Meshes/Textures/moon.ppm");
-	Image earth_img("git/Meshes/Textures/moon.ppm");
+	earthmat.set_textureName("Meshes/Textures/moon.ppm");
+	Image earth_img("Meshes/Textures/moon.ppm");
 	Texture* earth_tex = new Texture(earth_img);
 	materials.push_back(earthmat);
 
