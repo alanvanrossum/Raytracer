@@ -74,7 +74,7 @@ int main(int argc, char** argv)
     glEnable(GL_LIGHT0);
     glEnable(GL_COLOR_MATERIAL);
     int LightPos[4] = {0,0,2,0};
-    //int MatSpec [4] = {1,1,1,1};
+    int MatSpec [4] = {1,1,1,1};
     glLightiv(GL_LIGHT0,GL_POSITION,LightPos);
 
 	// Normals will be normalized in the graphics pipeline
