@@ -28,11 +28,6 @@ Material& Material::operator=(const Material & m) {
 	Tf_is_set_ = m.Tf_is_set_; // Transmission filter
 
 	illum_ = m.illum_;
-	illum_is_set_ = m.illum_is_set_;
-
-	normal_mapName_ = m.normal_mapName_;
-	normal_is_set = m.normal_is_set;
-
 	name_ = m.name_;
 	textureName_ = m.textureName_;
 	tex_is_set = m.tex_is_set;
@@ -49,15 +44,9 @@ void Material::cleanup() {
 	Tf_is_set_ = false;
 	illum_is_set_ = false;
 	tex_is_set = false;
-	normal_is_set = false;
-
 	name_ = "empty";
 	textureName_ = "empty";
 	normal_mapName_ = "empty";
-	Ns_ = 0.f;
-	Ni_ = 0.f;
-	illum_ = 0;
-	Tr_ = 0.f;
 }
 
 bool Material::is_valid() const {
