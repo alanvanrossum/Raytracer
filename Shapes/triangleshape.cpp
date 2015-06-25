@@ -13,7 +13,7 @@ TriangleShape::TriangleShape(Material &material, Triangle &triangle) : Shape(mat
 /**
 * Intersection method, returns if collided, and which color.
 */
-bool TriangleShape::intersection(const Vec3Df& origin, const Vec3Df& direction, Vec3Df& new_origin, Vec3Df& new_direction){
+bool TriangleShape::intersection(const Vec3Df& origin, const Vec3Df& direction, Vec3Df& newOrigin, Vec3Df& newDirection){
 	return false;
 }
 

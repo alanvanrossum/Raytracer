@@ -14,27 +14,29 @@ Plane::Plane(Material &material, Vec3Df origin, Vec3Df coefficient) : Shape(mate
 /**
 * Intersection method, returns if collided, and which color.
 */
-bool Plane::intersection(const Vec3Df& origin, const Vec3Df& direction, Vec3Df& new_origin, Vec3Df& new_direction){
+bool Plane::intersection(const Vec3Df& origin, const Vec3Df& direction, Vec3Df& newOrigin, Vec3Df& newDirection){
 	//
-	// See this for explanation: https://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection
+	// See this for explanation: http://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-plane-and-ray-disk-intersection
 	//
 	
 	// Normalize the coefficient
-	new_direction = _coefficient;
-	new_direction.normalize();
+	newDirection = _coefficient;
+	newDirection.normalize();
 
-	// 
-	float denom = Vec3Df::dotProduct(direction, new_direction);
-	if (denom > -EPSILON && denom < EPSILON)
+	// Calculate the denominator
+	float denominator = Vec3Df::dotProduct(direction, newDirection);
+	if (denominator > -EPSILON && denominator < EPSILON)
 		return false;
 
-	// Calculate term t in the expressen 'p = o + tD'
-	float t = Vec3Df::dotProduct(_origin - origin, new_direction) / denom;
+	// Solving for t.
+	float t = Vec3Df::dotProduct(_origin - origin, newDirection) / denominator;
+
+	// Check if t falls within the rounding margin.
 	if (t < EPSILON)
 		return false;
 	
 	// Calculate the new origin.
-	new_origin = origin + t * direction;
+	newOrigin = origin + t * direction;
 
 	return true;
 }

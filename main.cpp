@@ -17,12 +17,16 @@ Vec3Df MyCameraPosition;
 std::vector<Vec3Df> MyLightPositions;
 
 // Windows size
-unsigned int WindowSize_X = 800;
-unsigned int WindowSize_Y = 800;
+unsigned int WindowSize_X = 1000;
+unsigned int WindowSize_Y = 1000;
 
 // Raytraced image size
 unsigned int ImageSize_X = WindowSize_X;
 unsigned int ImageSize_Y = WindowSize_Y;
+
+// To render in multiple steps.
+unsigned int fromY = 0;
+unsigned int toY = 500;
 
 // Number of samples.
 unsigned int ns = 4;
@@ -259,9 +263,6 @@ void keyboard(unsigned char key, int x, int y)
 			produceRay(ImageSize_X - 1, ImageSize_Y - 1, &origin11, &dest11);
 			
 			Vec3Df rgb;
-
-			unsigned int fromY = 0;
-			unsigned int toY = 100;
 
 			for (unsigned int y = fromY; y < toY; ++y) {
 				for (unsigned int x = 0; x < ImageSize_X; ++x)

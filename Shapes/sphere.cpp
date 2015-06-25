@@ -16,7 +16,7 @@ Sphere::Sphere(Material &material, Vec3Df origin, float radius) : Shape(material
 /**
 * Intersection method, returns if collided, and which color.
 */
-bool Sphere::intersection(const Vec3Df& origin, const Vec3Df& direction, Vec3Df& new_origin, Vec3Df& new_direction){
+bool Sphere::intersection(const Vec3Df& origin, const Vec3Df& direction, Vec3Df& newOrigin, Vec3Df& newDirection){
 	//
 	// See this for explantion of the formula: https://en.wikipedia.org/wiki/Line%E2%80%93sphere_intersection
 	//
@@ -33,16 +33,20 @@ bool Sphere::intersection(const Vec3Df& origin, const Vec3Df& direction, Vec3Df&
 	float q = (b > 0.f) ? -0.5f * (b + sqrtf(disc)) : -0.5f * (b - sqrtf(disc));
 	float t0 = q / a;
 	float t1 = c / q;
-	if (t0 < t1) std::swap(t0, t1);
+	if (t0 < t1)
+		std::swap(t0, t1);
 
 	float t;
-	if (t0 < EPSILON)	return false;
-	if (t1 < 0)		t = t0;
-	else			t = t1;
+	if (t0 < EPSILON)
+		return false;
+	if (t1 < 0)
+		t = t0;
+	else
+		t = t1;
 
-	new_direction = trans_origin + t * direction;
-	new_direction.normalize();
-	new_origin = origin + t * direction;
+	newDirection = trans_origin + t * direction;
+	newDirection.normalize();
+	newOrigin = origin + t * direction;
 
 	return true;
 }
@@ -51,24 +55,34 @@ bool Sphere::intersection(const Vec3Df& origin, const Vec3Df& direction, Vec3Df&
  * Shading method specific for sphere.
  */
 Vec3Df Sphere::shade(const Vec3Df& camPos, const Vec3Df& intersect, const Vec3Df& lightPos, const Vec3Df& normal){
-	if (!_material.has_tex())
-		return Shape::shade(camPos, intersect, lightPos, normal);
-	float u, v;
-	Vec3Df mid = this->_origin;
-	Vec3Df dir = intersect - mid;
-	dir.normalize();
-	u = 0.5f + (atan2(dir[2], dir[0])) / (2.f * float(M_PI));
-	v = 0.5f - asin(dir[1]) / float(M_PI);
 
-	// U || V can't be less than 0. @FIXME for correction.
-	if (u < 0)
-		u = 0;
-	if (v < 0)
-		v = 0;
-			
-	Vec3Df diffuse = this->_textureMap->getColor(u, v);
-	this->_material.set_Kd(diffuse[0], diffuse[1], diffuse[2]);
-	return Shape::shade(camPos, intersect, lightPos, normal);
+	// If it has a texture, map the current color.
+	if (_material.has_tex()) {
+
+		Vec3Df direction = intersect - this->_origin;
+		direction.normalize();
+
+		// Calculate the position of the UV point.
+		float u = 0.5f + (atan2(direction[2], direction[0])) / (2.f * float(M_PI));
+		float v = 0.5f - asin(direction[1]) / float(M_PI);
+
+		// U || V can't be less than 0.
+		if (u < 0)
+			u = 0;
+		if (v < 0)
+			v = 0;
+
+		// Set the diffuse color.
+		Vec3Df diffuse = this->_textureMap->getColor(u, v);
+		this->_material.set_Kd(diffuse[0], diffuse[1], diffuse[2]);
+
+		return Shape::shade(camPos, intersect, lightPos, normal);
+	}
+	
+	// If no texture, then go directly to the Phong shading function.
+	else {
+		return Shape::shade(camPos, intersect, lightPos, normal);
+	}
 }
 
 /**
@@ -78,7 +92,8 @@ void Sphere::draw() {
 	glPushMatrix();
 
 	glTranslatef(this->_origin[0], this->_origin[1], this->_origin[2]);
-	//glColor3f(this->_material.Kd()[0], this->_material.Kd()[1], this->_material.Kd()[2]);
+	
+	// Sphere's are drawn red.
 	glColor3f(1, 0, 0);
 	glutSolidSphere(this->_radius, 20, 20);
 

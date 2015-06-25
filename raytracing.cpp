@@ -147,12 +147,15 @@ Vec3Df performRayTracing(const Vec3Df & origin, const Vec3Df & direction, unsign
 			// Check if the new depth is closer to the camera.
 			float depth = (tmpOrigin - origin).getLength();
 			if (depth < currentDepth) {
-
 				// We have intersected and are closer to the origin. This is the new next object to raytrace.
 				hasIntersected = true;
 				currentDepth = depth;
 				newOrigin = tmpOrigin;
 				newDirection = tmpDirection;
+				
+				if (intersectedShape != nullptr)
+					intersectedShape->cleanUp();
+
 				intersectedShape = shapes[i]->getIntersectedShape();
 			}
 		}
@@ -201,6 +204,7 @@ Vec3Df performRayTracing(const Vec3Df & origin, const Vec3Df & direction, unsign
 			// Check if there's an intersection between the intersected point and the light source
 			if (shapes[j]->intersection(newOrigin, lightDir, intPoint, unused) && (intPoint - newOrigin).getLength() < lightDist) {
 				intersection = true;
+				shapes[j]->getIntersectedShape()->cleanUp();
 			}
 		}
 
@@ -211,6 +215,9 @@ Vec3Df performRayTracing(const Vec3Df & origin, const Vec3Df & direction, unsign
 
 	// Divide the color by the number of lightsources.
 	directColor /= float(MyLightPositions.size());
+
+	// Cleanup
+	intersectedShape->cleanUp();
 
 	// Return the direct color and the reflectedcolor.
 	return directColor + reflectedColor;

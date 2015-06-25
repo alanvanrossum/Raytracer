@@ -41,6 +41,11 @@ class Shape {
 		virtual Vec3Df shade(const Vec3Df&, const Vec3Df&, const Vec3Df&, const Vec3Df&) = 0;
 
 		/**
+		 * Cleanup class. Only used for meshes.
+		 */
+		virtual void cleanUp() {}
+
+		/**
 		 * Return reference to this.
 		 */
 		virtual Shape* getIntersectedShape() = 0;
@@ -121,6 +126,11 @@ class TriangleShape : public Shape {
 		virtual bool intersection(const Vec3Df&, const Vec3Df&, Vec3Df&, Vec3Df&);
 		virtual Vec3Df shade(const Vec3Df&, const Vec3Df&, const Vec3Df&, const Vec3Df&);
 
+		// Delete the last triangle.
+		virtual void cleanUp() {
+			delete this;
+		}
+
 		virtual Shape* getIntersectedShape() { return  this; }
 
 		// Draw method
@@ -143,7 +153,7 @@ public:
 	virtual bool intersection(const Triangle &triangle, const Vec3Df&, const Vec3Df&, Vec3Df&, Vec3Df&);
 	virtual Vec3Df shade(const Vec3Df&, const Vec3Df&, const Vec3Df&, const Vec3Df&);
 
-	virtual Shape* getIntersectedShape() { return  _lastIntersectedTriangle; }
+	virtual Shape* getIntersectedShape() { return _lastIntersectedTriangle;	}
 
 	// Methods special to this class
 	void barycentric(const Triangle &, const Vec3Df &, float &, float &);
@@ -154,7 +164,7 @@ public:
 	// Variables
 
 	// Last intersected triangle
-	TriangleShape *_lastIntersectedTriangle;
+	TriangleShape *_lastIntersectedTriangle = nullptr;
 	
 	// Pointer to the mesh.
 	Mesh _mesh;
