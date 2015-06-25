@@ -21,10 +21,10 @@ bool Sphere::intersection(const Vec3Df& origin, const Vec3Df& direction, Vec3Df&
 	// See this for explantion of the formula: https://en.wikipedia.org/wiki/Line%E2%80%93sphere_intersection
 	//
 
-	Vec3Df trans_origin = origin - this->_origin;
+	Vec3Df transOrigin = origin - this->_origin;
 	float a = Vec3Df::dotProduct(direction, direction);
-	float b = 2 * Vec3Df::dotProduct(trans_origin, direction);
-	float c = Vec3Df::dotProduct(trans_origin, trans_origin) - this->_radius * this->_radius;
+	float b = 2 * Vec3Df::dotProduct(transOrigin, direction);
+	float c = Vec3Df::dotProduct(transOrigin, transOrigin) - this->_radius * this->_radius;
 
 	float disc = b * b - 4 * a * c;
 	if (disc < 0)	return false;
@@ -44,7 +44,7 @@ bool Sphere::intersection(const Vec3Df& origin, const Vec3Df& direction, Vec3Df&
 	else
 		t = t1;
 
-	newDirection = trans_origin + t * direction;
+	newDirection = transOrigin + t * direction;
 	newDirection.normalize();
 	newOrigin = origin + t * direction;
 
