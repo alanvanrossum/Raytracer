@@ -17,8 +17,8 @@ Vec3Df MyCameraPosition;
 std::vector<Vec3Df> MyLightPositions;
 
 // Windows size
-unsigned int WindowSize_X = 2000;
-unsigned int WindowSize_Y = 2000;
+unsigned int WindowSize_X = 800;
+unsigned int WindowSize_Y = 800;
 
 // Raytraced image size
 unsigned int ImageSize_X = WindowSize_X;
