@@ -72,13 +72,6 @@ Vec3Df Sphere::shade(const Vec3Df& camPos, const Vec3Df& intersect, const Vec3Df
 }
 
 /**
-* Refraction method specific for sphere.
-*/
-Vec3Df Sphere::refract(const Vec3Df &normal, const Vec3Df &direction, const float &ni, float &fresnel) {
-	return Shape::refract(normal, direction, ni, fresnel);
-}
-
-/**
 * Draw function to view the plane in the viewport.
 */
 void Sphere::draw() {

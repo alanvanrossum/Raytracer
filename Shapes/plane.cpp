@@ -47,13 +47,6 @@ Vec3Df Plane::shade(const Vec3Df& camPos, const Vec3Df& intersect, const Vec3Df&
 }
 
 /**
-* Refraction method specific for plane.
-*/
-Vec3Df Plane::refract(const Vec3Df &normal, const Vec3Df &direction, const float &ni, float &fresnel){
-	return Shape::refract(normal, direction, ni, fresnel);
-}
-
-/**
  * Draw function to view the plane in the viewport.
  */
 void Plane::draw() {

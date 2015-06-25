@@ -13,8 +13,8 @@ class Texture {
 		Texture(Image img);
 
 		// Methods
-		void convertBarycentricToTexCoord(float a, float b, Vec3Df* texcoords, float& tex_u, float& tex_v);
-		Vec3Df getColor(float u, float v);
+		void convertBarycentricCoordToTexCoord(float, float, Vec3Df*, float&, float&);
+		Vec3Df getColor(float, float);
 
 	private:
 		Image _image_data;

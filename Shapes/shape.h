@@ -20,16 +20,18 @@ class Shape {
 
 		/**
 		 * Method to check if a ray intersects with this shape.
+		 *
 		 * 1st param:	Origin of the ray
 		 * 2nd param:	Direction of the ray
 		 * 3rd param:	New origin of the intersected point
 		 * 4th param:	New direction at the intersected point
-		 * Return:		Wheter the ray has intersected with this object.
+		 * Return:		True if the ray has intersected with this object. False otherwise
 		 */
 		virtual bool intersection(const Vec3Df&, const Vec3Df&, Vec3Df&, Vec3Df&) = 0;
 
 		/**
-		* Shade the shape using specular, diffuse and ambient terms of the Material.
+		* Shade the shape using specular, diffuse and ambient components of the Material.
+		*
 		* 1st param:	The camera position
 		* 2nd param:	The point of intersection with this object and the ray.
 		* 3rd param:	The position of the light.
@@ -37,16 +39,6 @@ class Shape {
 		* Return		The color of this intersection point.
 		*/
 		virtual Vec3Df shade(const Vec3Df&, const Vec3Df&, const Vec3Df&, const Vec3Df&) = 0;
-
-		/**
-		* Calculate the refraction vector. For simplicity, all vectors must be normalized.
-		* 1st param:	The normal at the point of intersection.
-		* 2nd param:	The direction of the view vector.
-		* 3rd param:	The other refraction index.
-		* 4th param:	The return address for the fresnel value.
-		* Return		The color of this intersection point.
-		*/
-		virtual Vec3Df refract(const Vec3Df&, const Vec3Df&, const float&, float&) = 0;
 
 		/**
 		 * Return reference to this.
@@ -86,7 +78,6 @@ class Plane : public Shape {
 		// Inherited methods.
 		virtual bool intersection(const Vec3Df&, const Vec3Df&, Vec3Df&, Vec3Df&);
 		virtual Vec3Df shade(const Vec3Df&, const Vec3Df&, const Vec3Df&, const Vec3Df&);
-		virtual Vec3Df refract(const Vec3Df&, const Vec3Df&, const float&, float&);
 
 		virtual Shape* getIntersectedShape() { return  this; }
 
@@ -108,7 +99,6 @@ class Sphere : public Shape {
 		// Inherited methods.
 		virtual bool intersection(const Vec3Df&, const Vec3Df&, Vec3Df&, Vec3Df&);
 		virtual Vec3Df shade(const Vec3Df&, const Vec3Df&, const Vec3Df&, const Vec3Df&);
-		virtual Vec3Df refract(const Vec3Df&, const Vec3Df&, const float&, float&);
 
 		virtual Shape* getIntersectedShape() { return  this; }
 
@@ -130,7 +120,6 @@ class TriangleShape : public Shape {
 		// Inherited methods.
 		virtual bool intersection(const Vec3Df&, const Vec3Df&, Vec3Df&, Vec3Df&);
 		virtual Vec3Df shade(const Vec3Df&, const Vec3Df&, const Vec3Df&, const Vec3Df&);
-		virtual Vec3Df refract(const Vec3Df&, const Vec3Df&, const float&, float&);
 
 		virtual Shape* getIntersectedShape() { return  this; }
 
@@ -153,12 +142,11 @@ public:
 	virtual bool intersection(const Vec3Df&, const Vec3Df&, Vec3Df&, Vec3Df&);
 	virtual bool intersection(const Triangle &triangle, const Vec3Df&, const Vec3Df&, Vec3Df&, Vec3Df&);
 	virtual Vec3Df shade(const Vec3Df&, const Vec3Df&, const Vec3Df&, const Vec3Df&);
-	virtual Vec3Df refract(const Vec3Df&, const Vec3Df&, const float&, float&);
 
 	virtual Shape* getIntersectedShape() { return  _lastIntersectedTriangle; }
 
 	// Methods special to this class
-	void barycentric(const Triangle &triangle, const Vec3Df &p, float &a, float &b);
+	void barycentric(const Triangle &, const Vec3Df &, float &, float &);
 
 	// Draw method
 	virtual void draw();

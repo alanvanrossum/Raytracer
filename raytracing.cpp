@@ -182,10 +182,10 @@ Vec3Df performRayTracing(const Vec3Df & origin, const Vec3Df & direction, unsign
 	}
 
 	// Shadows. Loop over all light sources and check if an intersected point is in visible from a light source.
-	for (unsigned int j = 0; j < MyLightPositions.size(); j++) {
+	for (unsigned int i = 0; i < MyLightPositions.size(); i++) {
 		
 		// Direction from the light source to the intersected point
-		Vec3Df lightDir = MyLightPositions[j] - newOrigin;
+		Vec3Df lightDir = MyLightPositions[i] - newOrigin;
 
 		// Distance between intersected point and light source
 		float lightDist = lightDir.getLength();
@@ -194,19 +194,19 @@ Vec3Df performRayTracing(const Vec3Df & origin, const Vec3Df & direction, unsign
 		bool intersection = false;
 
 		// Loop over shapes. Check if there is an object between the intersected point and the light source.
-		for (unsigned int i = 0; i < shapes.size(); i++) {
+		for (unsigned int j = 0; j < shapes.size(); j++) {
 
 			Vec3Df intPoint, unused;
 			
 			// Check if there's an intersection between the intersected point and the light source
-			if (shapes[i]->intersection(newOrigin, lightDir, intPoint, unused) && (intPoint - newOrigin).getLength() < lightDist) {
+			if (shapes[j]->intersection(newOrigin, lightDir, intPoint, unused) && (intPoint - newOrigin).getLength() < lightDist) {
 				intersection = true;
 			}
 		}
 
 		// There was no intersection. Shade directly.
 		if (!intersection)
-			directColor += intersectedShape->shade(origin, newOrigin, MyLightPositions[j], newDirection);
+			directColor += intersectedShape->shade(origin, newOrigin, MyLightPositions[i], newDirection);
 	}
 
 	// Divide the color by the number of lightsources.

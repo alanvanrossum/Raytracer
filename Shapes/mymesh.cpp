@@ -120,13 +120,6 @@ Vec3Df MyMesh::shade(const Vec3Df& camPos, const Vec3Df& intersect, const Vec3Df
 }
 
 /**
- * Refraction method specific for MyMesh.
- */
-Vec3Df MyMesh::refract(const Vec3Df &normal, const Vec3Df &direction, const float &ni, float &fresnel){
-	return Shape::refract(normal, direction, ni, fresnel);
-}
-
-/**
  * Draw function to view the plane in the viewport.
  */
 void MyMesh::draw() {
